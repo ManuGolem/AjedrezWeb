@@ -1,0 +1,21 @@
+* {
+    padding: 0;
+    margin: a;
+}
+
+.tablero {
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-template-rows: repeat(8, 70px);
+    justify-content: center;
+}
+
+.blanca {
+    width: 100%;
+    background-color: #ebecd0;
+}
+
+.negra {
+    width: 100%;
+    background-color: #739552;
+}
