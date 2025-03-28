@@ -28,3 +28,10 @@
 img {
     width: 32px;
 }
+
+.pieza {
+    &:hover {
+        cursor: pointer;
+        scale: 1.1;
+    }
+}
