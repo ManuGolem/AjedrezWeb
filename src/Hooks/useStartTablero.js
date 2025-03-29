@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useStartTablero() {
+export function useStartTablero(start) {
     const [tableroCords, setTablero] = useState();
     const [piezas, setPiezas] = useState();
     useEffect(() => {
@@ -52,6 +52,6 @@ export function useStartTablero() {
             g8: "C",
             h8: "R",
         });
-    }, []);
+    }, [start]);
     return { tableroCords, piezas };
 }
