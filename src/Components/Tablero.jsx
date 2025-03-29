@@ -1,16 +1,19 @@
 import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { useStartTablero } from "../Hooks/useStartTablero";
-import { mostrarPath } from "../utils/path";
-export function Tablero() {
+import { mostrarPath, moverPieza } from "../utils/mov";
+export function Tablero({ start }) {
     const [mapPosPiezas, setMapPiezas] = useState();
     const [tablero, setTablero] = useState();
     const [posibles, setPosibles] = useState();
-    const { tableroCords, piezas } = useStartTablero();
+
+    const { tableroCords, piezas } = useStartTablero(start);
+
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
     }, [tableroCords, piezas]);
+
     return (
         <article className="tablero">
             {tablero &&
@@ -42,6 +45,14 @@ export function Tablero() {
                                             <span
                                                 key={columna}
                                                 className="posible"
+                                                onClick={() =>
+                                                    moverPieza(
+                                                        columna,
+                                                        mapPosPiezas,
+                                                        setMapPiezas,
+                                                        setPosibles,
+                                                    )
+                                                }
                                             ></span>
                                         ),
                                 )}
