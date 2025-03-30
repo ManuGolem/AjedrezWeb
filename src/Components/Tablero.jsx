@@ -1,17 +1,19 @@
 import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { useStartTablero } from "../Hooks/useStartTablero";
-import { mostrarPath, moverPieza } from "../utils/mov";
+import { mostrarPath, moverPieza, capturarPieza } from "../utils/mov";
 export function Tablero({ start }) {
     const [mapPosPiezas, setMapPiezas] = useState();
     const [tablero, setTablero] = useState();
     const [posibles, setPosibles] = useState();
-
+    const [capturas, setCaputras] = useState();
     const { tableroCords, piezas } = useStartTablero(start);
 
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
+        setCaputras();
+        setPosibles();
     }, [tableroCords, piezas]);
 
     return (
@@ -19,20 +21,10 @@ export function Tablero({ start }) {
             {tablero &&
                 tablero.map((fila, i) =>
                     fila.map((columna, j) => (
-                        <div
-                            key={`${i}-${j}`}
-                            id={columna}
-                            className={data.tablero[columna]}
-                        >
+                        <div key={`${i}-${j}`} id={columna} className={data.tablero[columna]}>
                             {mapPosPiezas[columna] && (
                                 <img
-                                    onClick={() =>
-                                        mostrarPath(
-                                            columna,
-                                            mapPosPiezas,
-                                            setPosibles,
-                                        )
-                                    }
+                                    onClick={() => mostrarPath(columna, mapPosPiezas, setPosibles, setCaputras)}
                                     className="pieza"
                                     src={data.piezas[mapPosPiezas[columna]]}
                                     alt={columna}
@@ -45,14 +37,18 @@ export function Tablero({ start }) {
                                             <span
                                                 key={columna}
                                                 className="posible"
-                                                onClick={() =>
-                                                    moverPieza(
-                                                        columna,
-                                                        mapPosPiezas,
-                                                        setMapPiezas,
-                                                        setPosibles,
-                                                    )
-                                                }
+                                                onClick={() => moverPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras)}
+                                            ></span>
+                                        ),
+                                )}
+                            {capturas &&
+                                capturas.map(
+                                    (pos) =>
+                                        pos == columna && (
+                                            <span
+                                                key={columna}
+                                                className="captura"
+                                                onClick={() => capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras)}
                                             ></span>
                                         ),
                                 )}
