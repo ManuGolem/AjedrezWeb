@@ -45,10 +45,11 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
 
             if (!esPosicionValida(nuevaLetra, nuevoNumero)) break;
 
-            if (letra === "r") {
+            if (letra === "r" || letra === "q") {
                 if (mapPosPiezas[posicion]) {
-                    if (!esBlanco(posicion)) {
+                    if (!esBlanco(mapPosPiezas[posicion])) {
                         capturas.push(posicion);
+                        break;
                     } else {
                         break;
                     }
@@ -91,8 +92,9 @@ function movimientoRey(letraCode, numero, mapPosPiezas) {
 
     return movimientos;
 }
-function movimientosAlfil(letraCode, numero, mapPosPiezas) {
+function movimientosAlfil(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
+    const capturas = [];
     const direcciones = [
         [1, 1],
         [1, -1],
@@ -106,13 +108,33 @@ function movimientosAlfil(letraCode, numero, mapPosPiezas) {
             const posicion = nuevaLetra + nuevoNumero;
 
             if (!esPosicionValida(nuevaLetra, nuevoNumero)) break;
-            if (mapPosPiezas[posicion]) break;
-
-            movimientos.push(posicion);
+            if (letra === "b" || letra === "q") {
+                if (mapPosPiezas[posicion]) {
+                    if (!esBlanco(mapPosPiezas[posicion])) {
+                        capturas.push(posicion);
+                        break;
+                    } else {
+                        break;
+                    }
+                } else {
+                    movimientos.push(posicion);
+                }
+            } else {
+                if (mapPosPiezas[posicion]) {
+                    if (esBlanco(mapPosPiezas[posicion])) {
+                        capturas.push(posicion);
+                        break;
+                    } else {
+                        break;
+                    }
+                } else {
+                    movimientos.push(posicion);
+                }
+            }
         }
     });
 
-    return movimientos;
+    return { movimientos, capturas };
 }
 export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
     const pieza = mapPosPiezas[cord];
@@ -176,12 +198,19 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
         posiblesMovs = movimientos;
     } else if (pieza === "b" || pieza === "B") {
         //Alfiles
-        posiblesMovs = movimientosAlfil(letraCode, numero, mapPosPiezas);
+        const { movimientos, capturas } = movimientosAlfil(letraCode, numero, mapPosPiezas, pieza);
+        posiblesCapturas = capturas;
+        posiblesMovs = movimientos;
     } else if (pieza === "q" || pieza === "Q") {
         //Damas
-        posiblesMovs = movimientosTorre(letraCode, numero, mapPosPiezas);
-        const aux = movimientosAlfil(letraCode, numero, mapPosPiezas);
+        const { movimientos: movimientosT, capturas: capturasTorre } = movimientosTorre(letraCode, numero, mapPosPiezas, pieza);
+        const { movimientos: movimientosA, capturas: capturasAlfil } = movimientosAlfil(letraCode, numero, mapPosPiezas, pieza);
+        posiblesMovs = movimientosT;
+        const aux = movimientosA;
         posiblesMovs = posiblesMovs.concat(aux);
+        posiblesCapturas = capturasTorre;
+        const capAux = capturasAlfil;
+        posiblesCapturas = posiblesCapturas.concat(capAux);
     } else if (pieza === "k" || pieza === "K") {
         //Reyes
         posiblesMovs = movimientoRey(letraCode, numero, mapPosPiezas);
