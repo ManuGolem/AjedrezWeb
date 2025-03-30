@@ -1,3 +1,7 @@
 export function NuevaPartida({ reiniciarTablero }) {
-    return <button onClick={reiniciarTablero}>Nueva Partida</button>;
+    return (
+        <button className="nuevaPartida" onClick={reiniciarTablero}>
+            Nueva Partida
+        </button>
+    );
 }
