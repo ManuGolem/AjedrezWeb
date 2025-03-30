@@ -9,19 +9,28 @@ const MovsCaballo = [
     [-1, 2],
 ];
 let piezaSeleccionada;
-export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles) {
+function esBlanco(pieza) {
+    const letra = pieza.split("")[0];
+    if (letra === "p" || letra === "c" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
+        return true;
+    }
+    return false;
+}
+export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
     copiaMap[posicion] = piezaAMover;
     setMapPiezas(copiaMap);
     setPosibles();
+    setCapturas();
 }
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
 }
-function movimientosTorre(letraCode, numero, mapPosPiezas) {
+function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
+    const capturas = [];
     const direcciones = [
         [1, 0],
         [-1, 0],
@@ -35,13 +44,32 @@ function movimientosTorre(letraCode, numero, mapPosPiezas) {
             const posicion = nuevaLetra + nuevoNumero;
 
             if (!esPosicionValida(nuevaLetra, nuevoNumero)) break;
-            if (mapPosPiezas[posicion]) break;
 
-            movimientos.push(posicion);
+            if (letra === "r") {
+                if (mapPosPiezas[posicion]) {
+                    if (!esBlanco(posicion)) {
+                        capturas.push(posicion);
+                    } else {
+                        break;
+                    }
+                } else {
+                    movimientos.push(posicion);
+                }
+            } else {
+                if (mapPosPiezas[posicion]) {
+                    if (esBlanco(mapPosPiezas[posicion])) {
+                        capturas.push(posicion);
+                        break;
+                    } else {
+                        break;
+                    }
+                } else {
+                    movimientos.push(posicion);
+                }
+            }
         }
     });
-
-    return movimientos;
+    return { movimientos, capturas };
 }
 function movimientoRey(letraCode, numero, mapPosPiezas) {
     const movimientos = [];
@@ -55,10 +83,7 @@ function movimientoRey(letraCode, numero, mapPosPiezas) {
             const nuevoNumero = numero + deltaNumero;
             const posicion = nuevaLetra + nuevoNumero;
 
-            if (
-                esPosicionValida(nuevaLetra, nuevoNumero) &&
-                !mapPosPiezas[posicion]
-            ) {
+            if (esPosicionValida(nuevaLetra, nuevoNumero) && !mapPosPiezas[posicion]) {
                 movimientos.push(posicion);
             }
         }
@@ -89,13 +114,14 @@ function movimientosAlfil(letraCode, numero, mapPosPiezas) {
 
     return movimientos;
 }
-export function mostrarPath(cord, mapPosPiezas, setPosibles) {
+export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
     const pieza = mapPosPiezas[cord];
     const cordenadas = cord.split("");
     const letra = cordenadas[0];
     const numero = Number(cordenadas[1]);
     const letraCode = letra.charCodeAt(0);
     let posiblesMovs = [];
+    let posiblesCapturas = [];
     if (pieza === "p") {
         //Peon blanco
         const mov1 = letra + (numero + 1);
@@ -108,6 +134,11 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles) {
                 }
             }
         }
+        const captura1 = String.fromCharCode(letraCode + 1) + (numero + 1);
+        const captura2 = String.fromCharCode(letraCode - 1) + (numero + 1);
+
+        mapPosPiezas[captura1] && !esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
+        mapPosPiezas[captura2] && !esBlanco(mapPosPiezas[captura2]) && posiblesCapturas.push(captura2);
     } else if (pieza === "P") {
         //Peon Negro
         const mov1 = letra + (numero - 1);
@@ -120,22 +151,29 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles) {
                 }
             }
         }
+        const captura1 = String.fromCharCode(letraCode + 1) + (numero - 1);
+        const captura2 = String.fromCharCode(letraCode - 1) + (numero - 1);
+        mapPosPiezas[captura1] && esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
+        mapPosPiezas[captura2] && esBlanco(mapPosPiezas[captura2]) && posiblesCapturas.push(captura2);
     } else if (pieza === "c" || pieza === "C") {
         //Caballos
         MovsCaballo.forEach(([cambioLetra, cambioNumero]) => {
             const nuevaLetra = String.fromCharCode(letraCode + cambioLetra);
             const nuevoNumero = numero + cambioNumero;
             const posicion = nuevaLetra + nuevoNumero;
-            if (
-                !mapPosPiezas[posicion] &&
-                esPosicionValida(nuevaLetra, nuevoNumero)
-            ) {
-                posiblesMovs.push(posicion);
+            if (esPosicionValida(nuevaLetra, nuevoNumero)) {
+                !mapPosPiezas[posicion]
+                    ? posiblesMovs.push(posicion)
+                    : pieza === "c"
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
         //Torres
-        posiblesMovs = movimientosTorre(letraCode, numero, mapPosPiezas);
+        const { movimientos, capturas } = movimientosTorre(letraCode, numero, mapPosPiezas, pieza);
+        posiblesCapturas = capturas;
+        posiblesMovs = movimientos;
     } else if (pieza === "b" || pieza === "B") {
         //Alfiles
         posiblesMovs = movimientosAlfil(letraCode, numero, mapPosPiezas);
@@ -150,4 +188,6 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles) {
     }
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);
+    setCapturas(posiblesCapturas);
 }
+export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras) {}
