@@ -16,6 +16,15 @@ function esBlanco(pieza) {
     }
     return false;
 }
+export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas) {
+    const piezaAMover = mapPosPiezas[piezaSeleccionada];
+    const copiaMap = mapPosPiezas;
+    copiaMap[piezaSeleccionada] = "";
+    copiaMap[columna] = piezaAMover;
+    setMapPiezas(copiaMap);
+    setPosibles();
+    setCapturas();
+}
 export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
@@ -219,4 +228,3 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
     setPosibles(posiblesMovs);
     setCapturas(posiblesCapturas);
 }
-export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras) {}

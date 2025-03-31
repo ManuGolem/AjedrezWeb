@@ -6,13 +6,13 @@ export function Tablero({ start }) {
     const [mapPosPiezas, setMapPiezas] = useState();
     const [tablero, setTablero] = useState();
     const [posibles, setPosibles] = useState();
-    const [capturas, setCaputras] = useState();
+    const [capturas, setCapturas] = useState();
     const { tableroCords, piezas } = useStartTablero(start);
 
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
-        setCaputras();
+        setCapturas();
         setPosibles();
     }, [tableroCords, piezas]);
 
@@ -24,7 +24,7 @@ export function Tablero({ start }) {
                         <div key={`${i}-${j}`} id={columna} className={data.tablero[columna]}>
                             {mapPosPiezas[columna] && (
                                 <img
-                                    onClick={() => mostrarPath(columna, mapPosPiezas, setPosibles, setCaputras)}
+                                    onClick={() => mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas)}
                                     className="pieza"
                                     src={data.piezas[mapPosPiezas[columna]]}
                                     alt={columna}
@@ -37,7 +37,7 @@ export function Tablero({ start }) {
                                             <span
                                                 key={columna}
                                                 className="posible"
-                                                onClick={() => moverPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras)}
+                                                onClick={() => moverPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas)}
                                             ></span>
                                         ),
                                 )}
@@ -48,7 +48,7 @@ export function Tablero({ start }) {
                                             <span
                                                 key={columna}
                                                 className="captura"
-                                                onClick={() => capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCaputras)}
+                                                onClick={() => capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas)}
                                             ></span>
                                         ),
                                 )}
