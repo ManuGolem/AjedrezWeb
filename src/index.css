@@ -3,6 +3,66 @@
     margin: a;
 }
 
+main {
+    display: grid;
+    grid-template-columns: 20px auto auto;
+    gap: 1rem;
+}
+
+.modalIzquierdo {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.piezasCapturadas {
+    border-radius: 1rem;
+    padding-inline: 10px;
+
+    h1 {
+        font-size: 20px;
+    }
+
+    background-color: #ebecd0;
+}
+
+.botonesNuevaPartida {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tableroCordsLetras {
+    grid-column-start: 2;
+    display: flex;
+    justify-content: center;
+
+    p {
+        width: 70px;
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+.tableroCordsNums {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    p {
+        height: 70px;
+        padding: 0;
+        margin: 0;
+        font-weight: bold;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+    }
+}
+
 .tablero {
     display: grid;
     grid-template-columns: repeat(8, 70px);
@@ -26,14 +86,10 @@
     position: relative;
 }
 
-img {
-    width: 32px;
-}
-
 .pieza {
     &:hover {
         cursor: pointer;
-        scale: 1.1;
+        scale: 1.05;
     }
 }
 
@@ -85,7 +141,7 @@ img {
     cursor: pointer;
 
     &:hover {
-        scale: 1.1;
+        scale: 1.05;
     }
 }
 

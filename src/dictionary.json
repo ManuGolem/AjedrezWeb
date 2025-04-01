@@ -1,5 +1,5 @@
 {
-    "piezas": {
+    "piezasv2": {
         "r": "./icons/rookWhite.svg",
         "c": "./icons/knightWhite.svg",
         "b": "./icons/bishopWhite.svg",
@@ -12,6 +12,20 @@
         "Q": "./icons/queen.svg",
         "K": "./icons/king.svg",
         "P": "./icons/pawn.svg"
+    },
+    "piezas": {
+        "r": "./prueba/rookWhite.png",
+        "c": "./prueba/knightWhite.png",
+        "b": "./prueba/bishopWhite.png",
+        "q": "./prueba/queenWhite.png",
+        "k": "./prueba/kingWhite.png",
+        "p": "./prueba/pawnWhite.png",
+        "R": "./prueba/rook.png",
+        "C": "./prueba/knight.png",
+        "B": "./prueba/bishop.png",
+        "Q": "./prueba/queen.png",
+        "K": "./prueba/king.png",
+        "P": "./prueba/pawn.png"
     },
     "tablero": {
         "a1": "black",

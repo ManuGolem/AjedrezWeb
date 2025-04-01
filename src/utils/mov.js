@@ -20,15 +20,22 @@ export function esMiTurno(turno, pos, mapPosPiezas) {
     const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
     return devolver;
 }
-export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno) {
+export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno, piezasCapturadas, setPiezasCapturadas) {
+    //Parte para guardar las piezas que se van capturando
+    const piezaACapturar = mapPosPiezas[columna];
+    const copiaPiezas = piezasCapturadas;
+    const colorPieza = esBlanco(piezaACapturar) ? "negras" : "blancas";
+    copiaPiezas[colorPieza].push(piezaACapturar);
+    setPiezasCapturadas(copiaPiezas);
+    //Logica para mover la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
     copiaMap[columna] = piezaAMover;
     setMapPiezas(copiaMap);
+    setTurno(!turno);
     setPosibles();
     setCapturas();
-    setTurno(!turno);
 }
 export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
