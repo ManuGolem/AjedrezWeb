@@ -88,3 +88,13 @@ img {
         scale: 1.1;
     }
 }
+
+.turno {
+    padding-inline: 40px;
+    padding-block: 10px;
+    background-color: #ebecd0;
+    border-radius: 8px;
+    border: none;
+    color: black;
+    font-weight: bold;
+}

@@ -16,7 +16,11 @@ function esBlanco(pieza) {
     }
     return false;
 }
-export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas) {
+export function esMiTurno(turno, pos, mapPosPiezas) {
+    const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
+    return devolver;
+}
+export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
@@ -24,8 +28,9 @@ export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, 
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
+    setTurno(!turno);
 }
-export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas) {
+export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
@@ -33,6 +38,7 @@ export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, se
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
+    setTurno(!turno);
 }
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
@@ -196,8 +202,8 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "c"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
