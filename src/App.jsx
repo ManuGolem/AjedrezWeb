@@ -22,17 +22,17 @@ export function App() {
                     <p key={num}>{num}</p>
                 ))}
             </div>
-            <Tablero start={reinciar} turno={turno} setTurno={setTurno} piezasCapturadas={piezasCapturadas} setPiezasCapturadas={setPiezasCapturadas} />
-            <div className="modalIzquierdo">
+            <div>
                 <PiezasCapturadas color="negras" piezasCapturadas={piezasCapturadas} />
-                <NuevaPartida reiniciarTablero={toggleReiniciar} turno={turno} />
+                <Tablero start={reinciar} turno={turno} setTurno={setTurno} piezasCapturadas={piezasCapturadas} setPiezasCapturadas={setPiezasCapturadas} />
+                <div className="tableroCordsLetras">
+                    {letras.map((le) => (
+                        <p key={le}>{le}</p>
+                    ))}
+                </div>
                 <PiezasCapturadas color="blancas" piezasCapturadas={piezasCapturadas} />
             </div>
-            <div className="tableroCordsLetras">
-                {letras.map((le) => (
-                    <p key={le}>{le}</p>
-                ))}
-            </div>
+            <NuevaPartida reiniciarTablero={toggleReiniciar} turno={turno} />
         </main>
     );
 }

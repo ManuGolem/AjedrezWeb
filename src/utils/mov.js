@@ -37,11 +37,31 @@ export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, 
     setPosibles();
     setCapturas();
 }
-export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno) {
+export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno, setMRB, setMRN) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
-    copiaMap[piezaSeleccionada] = "";
-    copiaMap[posicion] = piezaAMover;
+    if (piezaAMover === "k" || piezaAMover === "K") {
+        const partes = posicion.split("");
+        const numeroTorre = partes[1];
+        const letra = String.fromCharCode(partes[0].charCodeAt(0));
+        if (Math.abs(partes[0].charCodeAt(0) - piezaSeleccionada.split("")[0].charCodeAt(0)) > 1) {
+            const torrePos = letra === "g" ? "h" : "a";
+            const torreAMover = letra === "g" ? "f" : "d";
+            const letraTorre = piezaAMover === "k" ? "r" : "R";
+            piezaAMover === "k" && setMRB(false);
+            piezaAMover === "K" && setMRN(false);
+            copiaMap[piezaSeleccionada] = "";
+            copiaMap[posicion] = piezaAMover;
+            copiaMap[torrePos + numeroTorre] = "";
+            copiaMap[torreAMover + numeroTorre] = letraTorre;
+        } else {
+            copiaMap[piezaSeleccionada] = "";
+            copiaMap[posicion] = piezaAMover;
+        }
+    } else {
+        copiaMap[piezaSeleccionada] = "";
+        copiaMap[posicion] = piezaAMover;
+    }
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
@@ -94,7 +114,7 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     });
     return { movimientos, capturas };
 }
-function movimientoRey(letraCode, numero, mapPosPiezas) {
+function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primerMRN) {
     const movimientos = [];
 
     // Todas las direcciones adyacentes
@@ -109,6 +129,24 @@ function movimientoRey(letraCode, numero, mapPosPiezas) {
             if (esPosicionValida(nuevaLetra, nuevoNumero) && !mapPosPiezas[posicion]) {
                 movimientos.push(posicion);
             }
+        }
+    }
+    const letraCorto = String.fromCharCode(letraCode + 2);
+    const letraLargo = String.fromCharCode(letraCode - 2);
+    const torreCorto = String.fromCharCode(letraCode + 3) + numero;
+    const torreLargo = String.fromCharCode(letraCode - 4) + numero;
+
+    if (letra === "k") {
+        //Rey blanco
+        if (primerMRB) {
+            esPosicionValida(letraCorto, numero) && mapPosPiezas[torreCorto] === "r" && movimientos.push(letraCorto + numero);
+            esPosicionValida(letraLargo, numero) && mapPosPiezas[torreLargo] === "r" && movimientos.push(letraLargo + numero);
+        }
+    } else {
+        //Rey negro
+        if (primerMRN) {
+            esPosicionValida(letraCorto, numero) && mapPosPiezas[torreCorto] === "R" && movimientos.push(letraCorto + numero);
+            esPosicionValida(letraLargo, numero) && mapPosPiezas[torreLargo] === "R" && movimientos.push(letraLargo + numero);
         }
     }
 
@@ -158,7 +196,7 @@ function movimientosAlfil(letraCode, numero, mapPosPiezas, letra) {
 
     return { movimientos, capturas };
 }
-export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
+export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN) {
     const pieza = mapPosPiezas[cord];
     const cordenadas = cord.split("");
     const letra = cordenadas[0];
@@ -209,8 +247,8 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "c"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -235,7 +273,7 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas) {
         posiblesCapturas = posiblesCapturas.concat(capAux);
     } else if (pieza === "k" || pieza === "K") {
         //Reyes
-        posiblesMovs = movimientoRey(letraCode, numero, mapPosPiezas);
+        posiblesMovs = movimientoRey(letraCode, numero, mapPosPiezas, pieza, primerMRB, primerMRN);
     }
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);

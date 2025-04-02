@@ -8,11 +8,16 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     const [posibles, setPosibles] = useState();
     const [capturas, setCapturas] = useState();
     const { tableroCords, piezas } = useStartTablero(start);
+    const [movimientos, setMovimientos] = useState();
+    const [primerMRB, setMRB] = useState(true);
+    const [primerMRN, setMRN] = useState(true);
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
         setCapturas();
         setPosibles();
+        setMRB(true);
+        setMRN(true);
         setPiezasCapturadas({
             blancas: [],
             negras: [],
@@ -22,7 +27,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     function mostrarPiezas(columna) {
         return mapPosPiezas[columna] ? (
             <img
-                onClick={() => esMiTurno(turno, columna, mapPosPiezas) && mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas)}
+                onClick={() => esMiTurno(turno, columna, mapPosPiezas) && mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN)}
                 className="pieza"
                 src={data.piezas[mapPosPiezas[columna]]}
                 alt={columna}
@@ -32,41 +37,41 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     function mostrarPosiblesMovimientos(columna) {
         return posibles
             ? posibles.map(
-                (pos) =>
-                    pos === columna && (
-                        <span
-                            key={columna}
-                            className="posible"
-                            onClick={() => moverPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno)}
-                        ></span>
-                    ),
-            )
+                  (pos) =>
+                      pos === columna && (
+                          <span
+                              key={columna}
+                              className="posible"
+                              onClick={() => moverPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno, setMRB, setMRN)}
+                          ></span>
+                      ),
+              )
             : null;
     }
     function mostrarPosiblesCapturas(columna) {
         return capturas
             ? capturas.map(
-                (pos) =>
-                    pos == columna && (
-                        <span
-                            key={columna}
-                            className="captura"
-                            onClick={() =>
-                                capturarPieza(
-                                    columna,
-                                    mapPosPiezas,
-                                    setMapPiezas,
-                                    setPosibles,
-                                    setCapturas,
-                                    turno,
-                                    setTurno,
-                                    piezasCapturadas,
-                                    setPiezasCapturadas,
-                                )
-                            }
-                        ></span>
-                    ),
-            )
+                  (pos) =>
+                      pos == columna && (
+                          <span
+                              key={columna}
+                              className="captura"
+                              onClick={() =>
+                                  capturarPieza(
+                                      columna,
+                                      mapPosPiezas,
+                                      setMapPiezas,
+                                      setPosibles,
+                                      setCapturas,
+                                      turno,
+                                      setTurno,
+                                      piezasCapturadas,
+                                      setPiezasCapturadas,
+                                  )
+                              }
+                          ></span>
+                      ),
+              )
             : null;
     }
     return (
