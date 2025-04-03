@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NuevaPartida } from "./Components/NuevaPartida";
+import { ModalIzquierdo } from "./Components/ModalIzquierdo";
 import { Tablero } from "./Components/Tablero";
 import { PiezasCapturadas } from "./Components/PiezasCapturadas";
 
@@ -10,6 +10,7 @@ export function App() {
         blancas: [],
         negras: [],
     });
+    const [jugadas, setJugadas] = useState([]);
     const numeros = [8, 7, 6, 5, 4, 3, 2, 1];
     const letras = ["a", "b", "c", "d", "e", "f", "g", "h"];
     function toggleReiniciar() {
@@ -24,7 +25,15 @@ export function App() {
             </div>
             <div>
                 <PiezasCapturadas color="negras" piezasCapturadas={piezasCapturadas} />
-                <Tablero start={reinciar} turno={turno} setTurno={setTurno} piezasCapturadas={piezasCapturadas} setPiezasCapturadas={setPiezasCapturadas} />
+                <Tablero
+                    start={reinciar}
+                    turno={turno}
+                    setTurno={setTurno}
+                    piezasCapturadas={piezasCapturadas}
+                    setPiezasCapturadas={setPiezasCapturadas}
+                    jugadas={jugadas}
+                    setJugadas={setJugadas}
+                />
                 <div className="tableroCordsLetras">
                     {letras.map((le) => (
                         <p key={le}>{le}</p>
@@ -32,7 +41,7 @@ export function App() {
                 </div>
                 <PiezasCapturadas color="blancas" piezasCapturadas={piezasCapturadas} />
             </div>
-            <NuevaPartida reiniciarTablero={toggleReiniciar} turno={turno} />
+            <ModalIzquierdo reiniciarTablero={toggleReiniciar} jugadas={jugadas} />
         </main>
     );
 }
