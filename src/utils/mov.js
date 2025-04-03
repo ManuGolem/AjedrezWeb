@@ -37,7 +37,32 @@ export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, 
     setPosibles();
     setCapturas();
 }
-export function moverPieza(posicion, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno, setMRB, setMRN) {
+export function moverPieza(
+    posicion,
+    mapPosPiezas,
+    setMapPiezas,
+    setPosibles,
+    setCapturas,
+    turno,
+    setTurno,
+    setMRB,
+    setMRN,
+    movimientos,
+    setMovimientos,
+    jugadas,
+    setJugadas,
+) {
+    if (esBlanco(mapPosPiezas[piezaSeleccionada])) {
+        const nuevoMov = [posicion];
+        setMovimientos(nuevoMov);
+        const jugadaNueva = jugadas;
+        jugadaNueva.push(nuevoMov);
+        setJugadas(jugadaNueva);
+    } else {
+        const nuevoMov = movimientos;
+        nuevoMov.push(posicion);
+        setMovimientos(nuevoMov);
+    }
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     if (piezaAMover === "k" || piezaAMover === "K") {
@@ -247,8 +272,8 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "c"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
