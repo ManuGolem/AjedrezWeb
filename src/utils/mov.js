@@ -139,6 +139,42 @@ export function moverPieza(
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
 }
+function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimientos) {
+    const posInicial = letraTorre == "r" ? "e1" : "e8";
+    !hayPiezasEntreMedio(posInicial, torre, mapPosPiezas, "k") &&
+        esPosicionValida(letra, numero) &&
+        mapPosPiezas[torre] === letraTorre &&
+        movimientos.push(letra + numero);
+}
+function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
+    if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
+        const partesInicial = posInicial.split("");
+        const partesFinal = posFinal.split("");
+        const letraDePosInicial = partesInicial[0].charCodeAt(0);
+        const numeroDePosInicial = partesInicial[1];
+        const letraDePosFinal = partesFinal[0].charCodeAt(0);
+        const numeroDePosFinal = partesFinal[1];
+        if (numeroDePosInicial === numeroDePosFinal) {
+            //Caso enroque del rey
+            const numero = numeroDePosInicial;
+
+            if (letraDePosInicial < letraDePosFinal) {
+                for (let i = letraDePosInicial + 1; i < letraDePosFinal; i++) {
+                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
+                        return true;
+                    }
+                }
+            } else {
+                for (let i = letraDePosInicial - 1; i > letraDePosFinal; i--) {
+                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
 function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
     const capturas = [];
@@ -183,6 +219,7 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     });
     return { movimientos, capturas };
 }
+
 function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primerMRN) {
     const movimientos = [];
 
@@ -208,14 +245,14 @@ function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primer
     if (letra === "k") {
         //Rey blanco
         if (primerMRB) {
-            esPosicionValida(letraCorto, numero) && mapPosPiezas[torreCorto] === "r" && movimientos.push(letraCorto + numero);
-            esPosicionValida(letraLargo, numero) && mapPosPiezas[torreLargo] === "r" && movimientos.push(letraLargo + numero);
+            hacerEnroque("r", letraCorto, numero, torreCorto, mapPosPiezas, movimientos);
+            hacerEnroque("r", letraLargo, numero, torreLargo, mapPosPiezas, movimientos);
         }
     } else {
         //Rey negro
         if (primerMRN) {
-            esPosicionValida(letraCorto, numero) && mapPosPiezas[torreCorto] === "R" && movimientos.push(letraCorto + numero);
-            esPosicionValida(letraLargo, numero) && mapPosPiezas[torreLargo] === "R" && movimientos.push(letraLargo + numero);
+            hacerEnroque("R", letraCorto, numero, torreCorto, mapPosPiezas, movimientos);
+            hacerEnroque("R", letraLargo, numero, torreLargo, mapPosPiezas, movimientos);
         }
     }
 
