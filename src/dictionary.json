@@ -1,7 +1,7 @@
 {
     "piezasv2": {
         "r": "./icons/rookWhite.svg",
-        "c": "./icons/knightWhite.svg",
+        "n": "./icons/knightWhite.svg",
         "b": "./icons/bishopWhite.svg",
         "q": "./icons/queenWhite.svg",
         "k": "./icons/kingWhite.svg",
@@ -15,12 +15,12 @@
     },
     "posicionInicial": {
         "a1": "r",
-        "b1": "c",
+        "b1": "n",
         "c1": "b",
         "d1": "q",
         "e1": "k",
         "f1": "b",
-        "g1": "c",
+        "g1": "n",
         "h1": "r",
         "a2": "p",
         "b2": "p",
@@ -49,7 +49,7 @@
     },
     "piezas": {
         "r": "./prueba/rookWhite.png",
-        "c": "./prueba/knightWhite.png",
+        "n": "./prueba/knightWhite.png",
         "b": "./prueba/bishopWhite.png",
         "q": "./prueba/queenWhite.png",
         "k": "./prueba/kingWhite.png",

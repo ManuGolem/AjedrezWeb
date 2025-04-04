@@ -11,7 +11,7 @@ const MovsCaballo = [
 let piezaSeleccionada;
 function esBlanco(pieza) {
     const letra = pieza.split("")[0];
-    if (letra === "p" || letra === "c" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
+    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
         return true;
     }
     return false;
@@ -20,7 +20,21 @@ export function esMiTurno(turno, pos, mapPosPiezas) {
     const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
     return devolver;
 }
-export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, setCapturas, turno, setTurno, piezasCapturadas, setPiezasCapturadas) {
+export function capturarPieza(
+    columna,
+    mapPosPiezas,
+    setMapPiezas,
+    setPosibles,
+    setCapturas,
+    turno,
+    setTurno,
+    piezasCapturadas,
+    setPiezasCapturadas,
+    jugadas,
+    setJugadas,
+    movimientos,
+    setMovimientos,
+) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[columna];
     const copiaPiezas = piezasCapturadas;
@@ -28,6 +42,9 @@ export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, 
     copiaPiezas[colorPieza].push(piezaACapturar);
     setPiezasCapturadas(copiaPiezas);
     //Logica para mover la pieza
+    const posicion = columna;
+    //Llamo a que anote la captura
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos);
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
@@ -36,6 +53,38 @@ export function capturarPieza(columna, mapPosPiezas, setMapPiezas, setPosibles, 
     setTurno(!turno);
     setPosibles();
     setCapturas();
+}
+function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos) {
+    const pieza = mapPosPiezas[piezaSeleccionada];
+    const esCaptura = mapPosPiezas[posicion];
+    if (esCaptura) {
+        const letra = piezaSeleccionada.split("")[0];
+        if (esBlanco(pieza)) {
+            const nuevoMov = pieza !== "p" ? [pieza + "x" + posicion] : [letra + "x" + posicion];
+            setMovimientos(nuevoMov);
+            const jugadaNueva = jugadas;
+            jugadaNueva.push(nuevoMov);
+            setJugadas(jugadaNueva);
+        } else {
+            posicion = pieza !== "P" ? pieza + "x" + posicion : letra + "x" + posicion;
+            const nuevoMov = movimientos;
+            nuevoMov.push(posicion);
+            setMovimientos(nuevoMov);
+        }
+    } else {
+        if (esBlanco(pieza)) {
+            const nuevoMov = pieza !== "p" ? [pieza + posicion] : [posicion];
+            setMovimientos(nuevoMov);
+            const jugadaNueva = jugadas;
+            jugadaNueva.push(nuevoMov);
+            setJugadas(jugadaNueva);
+        } else {
+            posicion = pieza !== "P" ? pieza + posicion : posicion;
+            const nuevoMov = movimientos;
+            nuevoMov.push(posicion);
+            setMovimientos(nuevoMov);
+        }
+    }
 }
 export function moverPieza(
     posicion,
@@ -52,19 +101,12 @@ export function moverPieza(
     jugadas,
     setJugadas,
 ) {
-    if (esBlanco(mapPosPiezas[piezaSeleccionada])) {
-        const nuevoMov = [posicion];
-        setMovimientos(nuevoMov);
-        const jugadaNueva = jugadas;
-        jugadaNueva.push(nuevoMov);
-        setJugadas(jugadaNueva);
-    } else {
-        const nuevoMov = movimientos;
-        nuevoMov.push(posicion);
-        setMovimientos(nuevoMov);
-    }
+    //Llamada para hacer toda la logica de la anotacion de las jugadas
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos);
+    //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
+    //Caso en el que haya que hacer un enroque
     if (piezaAMover === "k" || piezaAMover === "K") {
         const partes = posicion.split("");
         const numeroTorre = partes[1];
@@ -84,6 +126,8 @@ export function moverPieza(
             copiaMap[posicion] = piezaAMover;
         }
     } else {
+        //Resto de piezas
+        //- [ ] Me falta hacer la captura al paso
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = piezaAMover;
     }
@@ -262,7 +306,7 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
         const captura2 = String.fromCharCode(letraCode - 1) + (numero - 1);
         mapPosPiezas[captura1] && esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
         mapPosPiezas[captura2] && esBlanco(mapPosPiezas[captura2]) && posiblesCapturas.push(captura2);
-    } else if (pieza === "c" || pieza === "C") {
+    } else if (pieza === "n" || pieza === "C") {
         //Caballos
         MovsCaballo.forEach(([cambioLetra, cambioNumero]) => {
             const nuevaLetra = String.fromCharCode(letraCode + cambioLetra);
@@ -271,9 +315,9 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
             if (esPosicionValida(nuevaLetra, nuevoNumero)) {
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
-                    : pieza === "c"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                    : pieza === "n"
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {

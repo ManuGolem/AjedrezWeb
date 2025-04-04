@@ -29,16 +29,21 @@ main {
 }
 
 .jugada {
-    display: flex;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
     justify-content: center;
 }
 
 .movimiento {
-    margin-inline: 14px;
-    border-radius: 10px;
-    flex-grow: 1;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    gap: 2px;
+
+    img {
+        width: 22px;
+    }
 
     &:hover {
         background-color: #484745;
