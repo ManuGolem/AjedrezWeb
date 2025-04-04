@@ -28,6 +28,11 @@ main {
     }
 }
 
+.notacion {
+    padding: 10px;
+    overflow: scroll;
+}
+
 .jugada {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
