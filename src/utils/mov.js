@@ -8,7 +8,9 @@ const MovsCaballo = [
     [-2, 1],
     [-1, 2],
 ];
+//Aca deberia usar un state
 let piezaSeleccionada;
+//Deberia sacar esta funcion a utils.js
 function esBlanco(pieza) {
     const letra = pieza.split("")[0];
     if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
@@ -16,6 +18,7 @@ function esBlanco(pieza) {
     }
     return false;
 }
+//Esta tmb para utils.js
 export function esMiTurno(turno, pos, mapPosPiezas) {
     const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
     return devolver;
@@ -54,6 +57,7 @@ export function capturarPieza(
     setPosibles();
     setCapturas();
 }
+//Esta funcion a anotarJugadas.js
 function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos) {
     const pieza = mapPosPiezas[piezaSeleccionada];
     const esCaptura = mapPosPiezas[posicion];
@@ -136,6 +140,7 @@ export function moverPieza(
     setCapturas();
     setTurno(!turno);
 }
+//Esta a utils.js
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
 }
@@ -146,6 +151,7 @@ function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimiento
         mapPosPiezas[torre] === letraTorre &&
         movimientos.push(letra + numero);
 }
+//Esta funcion tmb
 function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
     if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
         const partesInicial = posInicial.split("");
