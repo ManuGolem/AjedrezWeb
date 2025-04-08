@@ -1,3 +1,5 @@
+import { esBlanco, esPosicionValida, hayPiezasEntreMedio } from "./utils";
+import { anotarJugadas } from "./anotarJugadas";
 const MovsCaballo = [
     [1, 2],
     [2, 1],
@@ -10,19 +12,6 @@ const MovsCaballo = [
 ];
 //Aca deberia usar un state
 let piezaSeleccionada;
-//Deberia sacar esta funcion a utils.js
-function esBlanco(pieza) {
-    const letra = pieza.split("")[0];
-    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
-        return true;
-    }
-    return false;
-}
-//Esta tmb para utils.js
-export function esMiTurno(turno, pos, mapPosPiezas) {
-    const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
-    return devolver;
-}
 export function capturarPieza(
     columna,
     mapPosPiezas,
@@ -47,7 +36,7 @@ export function capturarPieza(
     //Logica para mover la pieza
     const posicion = columna;
     //Llamo a que anote la captura
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada);
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
     copiaMap[piezaSeleccionada] = "";
@@ -57,39 +46,7 @@ export function capturarPieza(
     setPosibles();
     setCapturas();
 }
-//Esta funcion a anotarJugadas.js
-function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos) {
-    const pieza = mapPosPiezas[piezaSeleccionada];
-    const esCaptura = mapPosPiezas[posicion];
-    if (esCaptura) {
-        const letra = piezaSeleccionada.split("")[0];
-        if (esBlanco(pieza)) {
-            const nuevoMov = pieza !== "p" ? [pieza + "x" + posicion] : [letra + "x" + posicion];
-            setMovimientos(nuevoMov);
-            const jugadaNueva = jugadas;
-            jugadaNueva.push(nuevoMov);
-            setJugadas(jugadaNueva);
-        } else {
-            posicion = pieza !== "P" ? pieza + "x" + posicion : letra + "x" + posicion;
-            const nuevoMov = movimientos;
-            nuevoMov.push(posicion);
-            setMovimientos(nuevoMov);
-        }
-    } else {
-        if (esBlanco(pieza)) {
-            const nuevoMov = pieza !== "p" ? [pieza + posicion] : [posicion];
-            setMovimientos(nuevoMov);
-            const jugadaNueva = jugadas;
-            jugadaNueva.push(nuevoMov);
-            setJugadas(jugadaNueva);
-        } else {
-            posicion = pieza !== "P" ? pieza + posicion : posicion;
-            const nuevoMov = movimientos;
-            nuevoMov.push(posicion);
-            setMovimientos(nuevoMov);
-        }
-    }
-}
+
 export function moverPieza(
     posicion,
     mapPosPiezas,
@@ -106,7 +63,7 @@ export function moverPieza(
     setJugadas,
 ) {
     //Llamada para hacer toda la logica de la anotacion de las jugadas
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada);
     //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = mapPosPiezas;
@@ -140,46 +97,12 @@ export function moverPieza(
     setCapturas();
     setTurno(!turno);
 }
-//Esta a utils.js
-function esPosicionValida(letra, numero) {
-    return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
-}
 function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimientos) {
     const posInicial = letraTorre == "r" ? "e1" : "e8";
     !hayPiezasEntreMedio(posInicial, torre, mapPosPiezas, "k") &&
         esPosicionValida(letra, numero) &&
         mapPosPiezas[torre] === letraTorre &&
         movimientos.push(letra + numero);
-}
-//Esta funcion tmb
-function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
-    if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
-        const partesInicial = posInicial.split("");
-        const partesFinal = posFinal.split("");
-        const letraDePosInicial = partesInicial[0].charCodeAt(0);
-        const numeroDePosInicial = partesInicial[1];
-        const letraDePosFinal = partesFinal[0].charCodeAt(0);
-        const numeroDePosFinal = partesFinal[1];
-        if (numeroDePosInicial === numeroDePosFinal) {
-            //Caso enroque del rey
-            const numero = numeroDePosInicial;
-
-            if (letraDePosInicial < letraDePosFinal) {
-                for (let i = letraDePosInicial + 1; i < letraDePosFinal; i++) {
-                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
-                        return true;
-                    }
-                }
-            } else {
-                for (let i = letraDePosInicial - 1; i > letraDePosFinal; i--) {
-                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
-                        return true;
-                    }
-                }
-            }
-        }
-    }
-    return false;
 }
 function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
