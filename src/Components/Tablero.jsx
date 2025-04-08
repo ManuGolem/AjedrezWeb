@@ -1,7 +1,8 @@
 import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { useStartTablero } from "../Hooks/useStartTablero";
-import { mostrarPath, moverPieza, capturarPieza, esMiTurno } from "../utils/mov";
+import { mostrarPath, moverPieza, capturarPieza } from "../utils/mov";
+import { esMiTurno } from "../utils/utils";
 export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCapturadas, jugadas, setJugadas }) {
     const [mapPosPiezas, setMapPiezas] = useState();
     const [tablero, setTablero] = useState();
