@@ -41,5 +41,11 @@ function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) 
     }
     return false;
 }
-
-export { esBlanco, esMiTurno, esPosicionValida, hayPiezasEntreMedio };
+function esJaque(posicion, mapPiezas, turno, setJaque) {
+    const pieza = mapPiezas[posicion];
+    //"K"-> oponente=Negras, "k"-> oponente=Blancas
+    const oponente = turno ? "K" : "k";
+    const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
+    console.log(pieza, oponente, reyOponente);
+}
+export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };
