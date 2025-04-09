@@ -24,7 +24,7 @@ main {
     }
 
     img {
-        width: 20px;
+        width: 30px;
     }
 }
 
@@ -68,7 +68,7 @@ main {
     justify-content: center;
 
     p {
-        width: 70px;
+        width: 80px;
         padding: 0;
         margin: 0;
         font-weight: bold;
@@ -83,7 +83,7 @@ main {
     justify-content: center;
 
     p {
-        height: 70px;
+        height: 80px;
         padding: 0;
         margin: 0;
         font-weight: bold;
@@ -96,8 +96,8 @@ main {
 .tablero {
     display: grid;
     grid-column-start: 2;
-    grid-template-columns: repeat(8, 70px);
-    grid-template-rows: repeat(8, 70px);
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
     justify-content: center;
 }
 
@@ -165,6 +165,8 @@ main {
 .nuevaPartida {
     padding-inline: 40px;
     padding-block: 10px;
+    font-size: 20px;
+    font-weight: bold;
     background-color: #81b64c;
     border-radius: 8px;
     border: none;
