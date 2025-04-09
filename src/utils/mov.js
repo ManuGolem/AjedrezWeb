@@ -1,4 +1,4 @@
-import { esBlanco, esPosicionValida, hayPiezasEntreMedio } from "./utils";
+import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
 const MovsCaballo = [
     [1, 2],
@@ -61,12 +61,11 @@ export function moverPieza(
     setMovimientos,
     jugadas,
     setJugadas,
+    setJaque,
 ) {
-    //Llamada para hacer toda la logica de la anotacion de las jugadas
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada);
     //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
-    const copiaMap = mapPosPiezas;
+    const copiaMap = { ...mapPosPiezas };
     //Caso en el que haya que hacer un enroque
     if (piezaAMover === "k" || piezaAMover === "K") {
         const partes = posicion.split("");
@@ -92,6 +91,10 @@ export function moverPieza(
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = piezaAMover;
     }
+    //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
+    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
+    //Llamada para hacer toda la logica de la anotacion de las jugadas
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
