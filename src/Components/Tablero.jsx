@@ -12,6 +12,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     const [movimientos, setMovimientos] = useState([]);
     const [primerMRB, setMRB] = useState(true);
     const [primerMRN, setMRN] = useState(true);
+    const [jaque, setJaque] = useState([]);
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
@@ -24,12 +25,18 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
             blancas: [],
             negras: [],
         });
+        setJaque({
+            blancas: false,
+            negras: false,
+        });
         setTurno(true);
     }, [tableroCords, piezas]);
     function mostrarPiezas(columna) {
         return mapPosPiezas[columna] ? (
             <img
-                onClick={() => esMiTurno(turno, columna, mapPosPiezas) && mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN)}
+                onClick={() =>
+                    esMiTurno(turno, columna, mapPosPiezas) && mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN, jaque)
+                }
                 className="pieza"
                 src={data.piezas[mapPosPiezas[columna]]}
                 alt={columna}
@@ -59,6 +66,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                                       setMovimientos,
                                       jugadas,
                                       setJugadas,
+                                      setJaque,
                                   )
                               }
                           ></span>
@@ -89,6 +97,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                                       setJugadas,
                                       movimientos,
                                       setMovimientos,
+                                      setJaque,
                                   )
                               }
                           ></span>
