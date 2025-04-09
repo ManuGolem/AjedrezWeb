@@ -1,5 +1,5 @@
 import { esBlanco } from "./utils";
-export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada) {
+export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque) {
     const pieza = mapPosPiezas[piezaSeleccionada];
     const esCaptura = mapPosPiezas[posicion];
     if (esCaptura) {
@@ -30,4 +30,5 @@ export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movim
             setMovimientos(nuevoMov);
         }
     }
+    dejoEnJaque && console.log(esBlanco(pieza) ? "Negras en jaque" : "Blancas en jaque");
 }
