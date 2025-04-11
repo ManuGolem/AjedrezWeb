@@ -1,3 +1,4 @@
+import { posiblesJugadas } from "./mov";
 function esBlanco(pieza) {
     const letra = pieza.split("")[0];
     if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
@@ -46,8 +47,9 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     //"K"-> oponente=Negras, "k"-> oponente=Blancas
     const oponente = turno ? "K" : "k";
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
+    const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
+    console.log(posiblesCapturas.includes(reyOponente) ? oponente.concat("tiene jaque") : "no hay jaque"); //Listo encontramos cuando uno de los dos tiene jaque
     //Aca hay que llamar a las posibles jugadas de la pieza y manteniendo el turno
     //Luego deberiamos ver si entre las posibles jugadas esta el reyOponente que es la posicion del rey del oponente
-    console.log(pieza, oponente, reyOponente);
 }
 export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };
