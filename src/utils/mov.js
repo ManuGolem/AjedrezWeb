@@ -62,6 +62,8 @@ export function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
+    posiblesJaques,
+    setPosiblesJaques,
 ) {
     //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
@@ -92,7 +94,7 @@ export function moverPieza(
         copiaMap[posicion] = piezaAMover;
     }
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
+    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque, posiblesJaques, setPosiblesJaques);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
@@ -234,7 +236,7 @@ function movimientosAlfil(letraCode, numero, mapPosPiezas, letra) {
 
     return { movimientos, capturas };
 }
-export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN) {
+export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN) {
     const pieza = mapPosPiezas[cord];
     const cordenadas = cord.split("");
     const letra = cordenadas[0];
@@ -254,6 +256,7 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
                 }
             }
         }
+
         const captura1 = String.fromCharCode(letraCode + 1) + (numero + 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero + 1);
 
@@ -271,6 +274,7 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
                 }
             }
         }
+
         const captura1 = String.fromCharCode(letraCode + 1) + (numero - 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero - 1);
         mapPosPiezas[captura1] && esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
@@ -285,19 +289,23 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
         //Torres
         const { movimientos, capturas } = movimientosTorre(letraCode, numero, mapPosPiezas, pieza);
+
         posiblesCapturas = capturas;
+
         posiblesMovs = movimientos;
     } else if (pieza === "b" || pieza === "B") {
         //Alfiles
         const { movimientos, capturas } = movimientosAlfil(letraCode, numero, mapPosPiezas, pieza);
+
         posiblesCapturas = capturas;
+
         posiblesMovs = movimientos;
     } else if (pieza === "q" || pieza === "Q") {
         //Damas
@@ -313,6 +321,17 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
         //Reyes
         posiblesMovs = movimientoRey(letraCode, numero, mapPosPiezas, pieza, primerMRB, primerMRN);
     }
+    if (orden === "movs") {
+        return posiblesMovs;
+    } else {
+        return posiblesCapturas;
+    }
+}
+export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN) {
+    const posiblesMovs = posiblesJugadas("movs", cord, mapPosPiezas, primerMRB, primerMRN);
+    const posiblesCapturas = posiblesJugadas("captura", cord, mapPosPiezas, primerMRB, primerMRN);
+    //Me gustaria hacer una funcion de posiblesJugadas que reciba una posicion, el mapPosPiezas y calcule todas las jugadas posibles.
+    //Aca va a pasar algo cuando llamemos esta funcion desde mostrarJaques
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);
     setCapturas(posiblesCapturas);
