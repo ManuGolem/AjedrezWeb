@@ -48,8 +48,7 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     const oponente = turno ? "K" : "k";
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
     const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
-    console.log(posiblesCapturas.includes(reyOponente) ? oponente.concat("tiene jaque") : "no hay jaque"); //Listo encontramos cuando uno de los dos tiene jaque
-    //Aca hay que llamar a las posibles jugadas de la pieza y manteniendo el turno
-    //Luego deberiamos ver si entre las posibles jugadas esta el reyOponente que es la posicion del rey del oponente
+    //Falta setear el jaque al oponente que se debe
+    return posiblesCapturas.includes(reyOponente) ? true : false;
 }
 export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };

@@ -30,5 +30,6 @@ export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movim
             setMovimientos(nuevoMov);
         }
     }
-    dejoEnJaque && console.log(esBlanco(pieza) ? "Negras en jaque" : "Blancas en jaque");
+    //Esto hacerlo con la anotacion "+"
+    dejoEnJaque && console.warn(esBlanco(pieza) ? "Negras en jaque" : "Blancas en jaque");
 }

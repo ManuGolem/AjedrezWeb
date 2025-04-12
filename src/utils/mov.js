@@ -26,6 +26,7 @@ export function capturarPieza(
     setJugadas,
     movimientos,
     setMovimientos,
+    setJaque,
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[columna];
@@ -35,18 +36,19 @@ export function capturarPieza(
     setPiezasCapturadas(copiaPiezas);
     //Logica para mover la pieza
     const posicion = columna;
-    //Llamo a que anote la captura
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada);
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
-    const copiaMap = mapPosPiezas;
+    const copiaMap = { ...mapPosPiezas };
     copiaMap[piezaSeleccionada] = "";
     copiaMap[columna] = piezaAMover;
+    //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
+    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
+    //Llamada para hacer toda la logica de la anotacion de las jugadas
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
-    setTurno(!turno);
     setPosibles();
     setCapturas();
+    setTurno(!turno);
 }
-
 export function moverPieza(
     posicion,
     mapPosPiezas,
@@ -62,8 +64,6 @@ export function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
-    posiblesJaques,
-    setPosiblesJaques,
 ) {
     //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
@@ -94,7 +94,7 @@ export function moverPieza(
         copiaMap[posicion] = piezaAMover;
     }
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque, posiblesJaques, setPosiblesJaques);
+    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
