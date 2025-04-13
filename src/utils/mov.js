@@ -289,8 +289,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -327,11 +327,9 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
         return posiblesCapturas;
     }
 }
-export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN) {
+export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN, jaque) {
     const posiblesMovs = posiblesJugadas("movs", cord, mapPosPiezas, primerMRB, primerMRN);
     const posiblesCapturas = posiblesJugadas("captura", cord, mapPosPiezas, primerMRB, primerMRN);
-    //Me gustaria hacer una funcion de posiblesJugadas que reciba una posicion, el mapPosPiezas y calcule todas las jugadas posibles.
-    //Aca va a pasar algo cuando llamemos esta funcion desde mostrarJaques
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);
     setCapturas(posiblesCapturas);

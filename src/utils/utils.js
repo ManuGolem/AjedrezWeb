@@ -49,16 +49,9 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
     //Falta setear el jaque al oponente que se debe
     if (posiblesCapturas.includes(reyOponente)) {
-        oponente === "K" ? setJaque({
-            negras: true,
-            blancas: false
-        }) : setJaque({
-            negras: false,
-            blancas: true
-        })
-        return true
+        oponente === "K" ? setJaque("negras") : setJaque("blancas");
+        return true;
     }
-    return false
-
+    return false;
 }
 export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };
