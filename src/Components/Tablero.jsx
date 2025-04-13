@@ -14,6 +14,9 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     const [primerMRN, setMRN] = useState(true);
     const [jaque, setJaque] = useState([]);
     useEffect(() => {
+        console.log(jaque)
+    }, [jaque])
+    useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
         setCapturas();

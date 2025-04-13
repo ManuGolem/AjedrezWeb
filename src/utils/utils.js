@@ -43,12 +43,22 @@ function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) 
     return false;
 }
 function esJaque(posicion, mapPiezas, turno, setJaque) {
-    const pieza = mapPiezas[posicion];
     //"K"-> oponente=Negras, "k"-> oponente=Blancas
     const oponente = turno ? "K" : "k";
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
     const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
     //Falta setear el jaque al oponente que se debe
-    return posiblesCapturas.includes(reyOponente) ? true : false;
+    if (posiblesCapturas.includes(reyOponente)) {
+        oponente === "K" ? setJaque({
+            negras: true,
+            blancas: false
+        }) : setJaque({
+            negras: false,
+            blancas: true
+        })
+        return true
+    }
+    return false
+
 }
 export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };
