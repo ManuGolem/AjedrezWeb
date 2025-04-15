@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ModalIzquierdo } from "./Components/ModalIzquierdo";
+import { ModalDerecho } from "./Components/ModalDerecho";
 import { Tablero } from "./Components/Tablero";
 import { PiezasCapturadas } from "./Components/PiezasCapturadas";
 
@@ -41,7 +41,7 @@ export function App() {
                 </div>
                 <PiezasCapturadas color="blancas" piezasCapturadas={piezasCapturadas} />
             </div>
-            <ModalIzquierdo reiniciarTablero={toggleReiniciar} jugadas={jugadas} />
+            <ModalDerecho reiniciarTablero={toggleReiniciar} jugadas={jugadas} />
         </main>
     );
 }
