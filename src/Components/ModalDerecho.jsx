@@ -2,7 +2,7 @@ import data from "../dictionary.json";
 export function ModalDerecho({ reiniciarTablero, jugadas }) {
     function esPeon(pieza) {
         const piezaCode = pieza.charCodeAt(0);
-        if (piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0)) {
+        if (piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0) && pieza !== "b") {
             return false;
         } else {
             return pieza;
@@ -11,7 +11,6 @@ export function ModalDerecho({ reiniciarTablero, jugadas }) {
     function escribirMovimiento(mov) {
         const partes = mov.split("");
         const letra = esPeon(partes[0]);
-        console.log(letra);
         const movimiento = letra ? partes.slice(1) : mov;
         return (
             <>
