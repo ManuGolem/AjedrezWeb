@@ -5,15 +5,13 @@ A simplified single-player chess application inspired by chess.com, built with R
 ## Features
 
 - **Complete Chess Rules**:
-    - Piece movement (including special moves like castling & en passant)
-    - Check/checkmate detection
+    - Piece movement
+    - Check detection
     - Turn management
 - **Move Notation**:
     - Algebraic notation logging
-    - Move history tracking
 - **Game State Management**:
     - Captured pieces tracking
-    - Game status indicators (check, game over)
 
 ## Tech Stack
 
@@ -27,8 +25,17 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
 
 ## Future Improvements
 
+- [ ] Passant move
+- [ ] Checkmate detection
+- [ ] Move history tracking
+- [ ] Game status indicators
+- [ ] Sound
 - [ ] Implement game timer
 - [ ] Add difficulty levels vs AI
 - [ ] Save game state locally
 - [ ] Multiplayer
 - [ ] PGN game import/export
+
+# Autor
+
+[ManuelCarreras](manugolem.github.io/Portfolio/ "Portfolio")
