@@ -12,7 +12,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     const [movimientos, setMovimientos] = useState([]);
     const [primerMRB, setMRB] = useState(true);
     const [primerMRN, setMRN] = useState(true);
-    const [jaque, setJaque] = useState();
+    const [jaque, setJaque] = useState({});
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
@@ -25,7 +25,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
             blancas: [],
             negras: [],
         });
-        setJaque();
+        setJaque({});
         setTurno(true);
     }, [tableroCords, piezas]);
     function mostrarPiezas(columna) {
@@ -43,63 +43,63 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     function mostrarPosiblesMovimientos(columna) {
         return posibles
             ? posibles.map(
-                  (pos) =>
-                      pos === columna && (
-                          <span
-                              key={columna}
-                              className="posible"
-                              onClick={() =>
-                                  moverPieza(
-                                      columna,
-                                      mapPosPiezas,
-                                      setMapPiezas,
-                                      setPosibles,
-                                      setCapturas,
-                                      turno,
-                                      setTurno,
-                                      setMRB,
-                                      setMRN,
-                                      movimientos,
-                                      setMovimientos,
-                                      jugadas,
-                                      setJugadas,
-                                      setJaque,
-                                  )
-                              }
-                          ></span>
-                      ),
-              )
+                (pos) =>
+                    pos === columna && (
+                        <span
+                            key={columna}
+                            className="posible"
+                            onClick={() =>
+                                moverPieza(
+                                    columna,
+                                    mapPosPiezas,
+                                    setMapPiezas,
+                                    setPosibles,
+                                    setCapturas,
+                                    turno,
+                                    setTurno,
+                                    setMRB,
+                                    setMRN,
+                                    movimientos,
+                                    setMovimientos,
+                                    jugadas,
+                                    setJugadas,
+                                    setJaque,
+                                )
+                            }
+                        ></span>
+                    ),
+            )
             : null;
     }
     function mostrarPosiblesCapturas(columna) {
         return capturas
             ? capturas.map(
-                  (pos) =>
-                      pos == columna && (
-                          <span
-                              key={columna}
-                              className="captura"
-                              onClick={() =>
-                                  capturarPieza(
-                                      columna,
-                                      mapPosPiezas,
-                                      setMapPiezas,
-                                      setPosibles,
-                                      setCapturas,
-                                      turno,
-                                      setTurno,
-                                      piezasCapturadas,
-                                      setPiezasCapturadas,
-                                      jugadas,
-                                      setJugadas,
-                                      movimientos,
-                                      setMovimientos,
-                                      setJaque,
-                                  )
-                              }
-                          ></span>
-                      ),
-              )
+                (pos) =>
+                    pos == columna && (
+                        <span
+                            key={columna}
+                            className="captura"
+                            onClick={() =>
+                                capturarPieza(
+                                    columna,
+                                    mapPosPiezas,
+                                    setMapPiezas,
+                                    setPosibles,
+                                    setCapturas,
+                                    turno,
+                                    setTurno,
+                                    piezasCapturadas,
+                                    setPiezasCapturadas,
+                                    jugadas,
+                                    setJugadas,
+                                    movimientos,
+                                    setMovimientos,
+                                    setJaque,
+                                )
+                            }
+                        ></span>
+                    ),
+            )
             : null;
     }
     return (

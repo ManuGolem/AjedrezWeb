@@ -47,11 +47,42 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     const oponente = turno ? "K" : "k";
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
     const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
-    //Falta setear el jaque al oponente que se debe
     if (posiblesCapturas.includes(reyOponente)) {
-        oponente === "K" ? setJaque("negras") : setJaque("blancas");
+        setJaque &&
+            (oponente === "K"
+                ? setJaque({
+                    piezas: "negras",
+                    lugar: posicion,
+                })
+                : setJaque({
+                    piezas: "blancas",
+                    lugar: posicion,
+                }));
         return true;
     }
     return false;
 }
-export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio };
+function tapoJaque(accion, jaque, cords, mapPosPiezas) {
+    const pieza = mapPosPiezas[cords];
+    const turno = jaque.piezas === "negras" ? true : false;
+    let posiblesTapadas = [];
+    if (accion === "movs") {
+        const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
+        posiblesJugadasPieza.forEach((jugada) => {
+            const copiaMap = { ...mapPosPiezas };
+            copiaMap[cords] = "";
+            copiaMap[jugada] = pieza;
+            !esJaque(jaque.lugar, copiaMap, turno, false) && posiblesTapadas.push(jugada);
+        });
+    } else {
+        const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
+        posiblesCapturasPieza.forEach((captura) => {
+            const copiaMap = { ...mapPosPiezas };
+            copiaMap[cords] = "";
+            copiaMap[captura] = mapPosPiezas[cords];
+            !esJaque(jaque.lugar, copiaMap, turno, false) && posiblesTapadas.push(captura);
+        });
+    }
+    return posiblesTapadas;
+}
+export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio, tapoJaque };
