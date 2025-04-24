@@ -107,7 +107,7 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
             {tablero &&
                 tablero.map((fila, i) =>
                     fila.map((columna, j) => (
-                        <div key={`${i}-${j}`} id={columna} className={data.tablero[columna]}>
+                        <div key={`${i}-${j}`} id={columna} className={columna === jaque.rey ? `${data.tablero[columna]} enJaque` : data.tablero[columna]}>
                             {mostrarPiezas(columna)}
                             {mostrarPosiblesMovimientos(columna)}
                             {mostrarPosiblesCapturas(columna)}

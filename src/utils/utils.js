@@ -53,10 +53,12 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
                 ? setJaque({
                     piezas: "negras",
                     lugar: posicion,
+                    rey: reyOponente,
                 })
                 : setJaque({
                     piezas: "blancas",
                     lugar: posicion,
+                    rey: reyOponente,
                 }));
         return true;
     }
