@@ -47,6 +47,7 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     const oponente = turno ? "K" : "k";
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
     const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
+    console.log("Es jaque?", posicion, turno, posiblesCapturas);
     if (posiblesCapturas.includes(reyOponente)) {
         setJaque &&
             (oponente === "K"

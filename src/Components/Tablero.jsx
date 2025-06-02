@@ -66,7 +66,9 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                                     setJaque,
                                 )
                             }
-                        ></span>
+                        >
+                            <span key={columna * 2} className="circulo"></span>
+                        </span>
                     ),
             )
             : null;
