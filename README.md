@@ -38,4 +38,4 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
 
 # Autor
 
-[ManuelCarreras](https://manugolem.github.io/Portfolio/ "Portfolio")
+[Manuel Carreras](https://manugolem.github.io/Portfolio/ "Portfolio")
