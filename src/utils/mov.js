@@ -64,6 +64,7 @@ export function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
+    jaque,
 ) {
     //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
@@ -77,8 +78,6 @@ export function moverPieza(
             const torrePos = letra === "g" ? "h" : "a";
             const torreAMover = letra === "g" ? "f" : "d";
             const letraTorre = piezaAMover === "k" ? "r" : "R";
-            piezaAMover === "k" && setMRB(false);
-            piezaAMover === "K" && setMRN(false);
             copiaMap[piezaSeleccionada] = "";
             copiaMap[posicion] = piezaAMover;
             copiaMap[torrePos + numeroTorre] = "";
@@ -87,13 +86,17 @@ export function moverPieza(
             copiaMap[piezaSeleccionada] = "";
             copiaMap[posicion] = piezaAMover;
         }
+        piezaAMover === "k" && setMRB(false);
+        piezaAMover === "K" && setMRN(false);
     } else {
         //Resto de piezas
         //- [ ] Me falta hacer la captura al paso
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = piezaAMover;
     }
+    jaque && setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
+
     const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
@@ -156,6 +159,7 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
 
 function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primerMRN) {
     const movimientos = [];
+    const capturas = [];
 
     // Todas las direcciones adyacentes
     for (let deltaLetra = -1; deltaLetra <= 1; deltaLetra++) {
@@ -166,8 +170,22 @@ function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primer
             const nuevoNumero = numero + deltaNumero;
             const posicion = nuevaLetra + nuevoNumero;
 
-            if (esPosicionValida(nuevaLetra, nuevoNumero) && !mapPosPiezas[posicion]) {
-                movimientos.push(posicion);
+            if (esPosicionValida(nuevaLetra, nuevoNumero)) {
+                if (!mapPosPiezas[posicion]) {
+                    movimientos.push(posicion);
+                } else {
+                    if (letra === "k") {
+                        //Rey blanco
+                        if (!esBlanco(mapPosPiezas[posicion])) {
+                            capturas.push(posicion);
+                        }
+                    } else {
+                        //Rey negro
+                        if (esBlanco(mapPosPiezas[posicion])) {
+                            capturas.push(posicion);
+                        }
+                    }
+                }
             }
         }
     }
@@ -190,7 +208,7 @@ function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primer
         }
     }
 
-    return movimientos;
+    return { movimientos, capturas };
 }
 function movimientosAlfil(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
@@ -289,8 +307,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -319,7 +337,9 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
         posiblesCapturas = posiblesCapturas.concat(capAux);
     } else if (pieza === "k" || pieza === "K") {
         //Reyes
-        posiblesMovs = movimientoRey(letraCode, numero, mapPosPiezas, pieza, primerMRB, primerMRN);
+        const { movimientos, capturas } = movimientoRey(letraCode, numero, mapPosPiezas, pieza, primerMRB, primerMRN);
+        posiblesCapturas = capturas;
+        posiblesMovs = movimientos;
     }
     if (orden === "movs") {
         return posiblesMovs;

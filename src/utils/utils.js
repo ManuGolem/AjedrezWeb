@@ -51,15 +51,15 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                    piezas: "negras",
-                    lugar: posicion,
-                    rey: reyOponente,
-                })
+                      piezas: "negras",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  })
                 : setJaque({
-                    piezas: "blancas",
-                    lugar: posicion,
-                    rey: reyOponente,
-                }));
+                      piezas: "blancas",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  }));
         return true;
     }
     return false;
@@ -68,13 +68,41 @@ function tapoJaque(accion, jaque, cords, mapPosPiezas) {
     const pieza = mapPosPiezas[cords];
     const turno = jaque.piezas === "negras" ? true : false;
     let posiblesTapadas = [];
+    const piezasBlancas = [];
+    const piezasNegras = [];
+    Object.entries(mapPosPiezas).forEach(([key, value]) => {
+        if (value !== "") {
+            if (esBlanco(value)) {
+                piezasBlancas.push(key);
+            } else {
+                piezasNegras.push(key);
+            }
+        }
+    });
     if (accion === "movs") {
         const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
+        //Jugadas para tapar
         posiblesJugadasPieza.forEach((jugada) => {
             const copiaMap = { ...mapPosPiezas };
             copiaMap[cords] = "";
             copiaMap[jugada] = pieza;
-            !esJaque(jaque.lugar, copiaMap, turno, false) && posiblesTapadas.push(jugada);
+            let hayProblema = false;
+            if (!turno) {
+                //Juegan blancas -> verificar cada ataque de las piezas negras
+                piezasNegras.forEach((cord) => {
+                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
+                        hayProblema = true;
+                    }
+                });
+            } else {
+                //Negras
+                piezasBlancas.forEach((cord) => {
+                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
+                        hayProblema = true;
+                    }
+                });
+            }
+            !hayProblema && posiblesTapadas.push(jugada);
         });
     } else {
         const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
@@ -82,7 +110,23 @@ function tapoJaque(accion, jaque, cords, mapPosPiezas) {
             const copiaMap = { ...mapPosPiezas };
             copiaMap[cords] = "";
             copiaMap[captura] = mapPosPiezas[cords];
-            !esJaque(jaque.lugar, copiaMap, turno, false) && posiblesTapadas.push(captura);
+            let hayProblema = false;
+            if (!turno) {
+                //Juegan blancas -> verificar cada ataque de las piezas negras
+                piezasNegras.forEach((cord) => {
+                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
+                        hayProblema = true;
+                    }
+                });
+            } else {
+                //Negras
+                piezasBlancas.forEach((cord) => {
+                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
+                        hayProblema = true;
+                    }
+                });
+            }
+            !hayProblema && posiblesTapadas.push(captura);
         });
     }
     return posiblesTapadas;
