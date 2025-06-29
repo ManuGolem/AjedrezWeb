@@ -40,6 +40,7 @@ export function capturarPieza(
     const copiaMap = { ...mapPosPiezas };
     copiaMap[piezaSeleccionada] = "";
     copiaMap[columna] = piezaAMover;
+    setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
@@ -94,9 +95,8 @@ export function moverPieza(
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = piezaAMover;
     }
-    jaque && setJaque({});
+    setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-
     const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
@@ -307,8 +307,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -352,11 +352,11 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
     let posiblesCapturas;
     if (jaque.piezas) {
         //Devuelvo true si me tapo del jaque con esa pieza, ademas devuelvo las posibles jugadas para taparme del jaque
-        posiblesMovs = tapoJaque("movs", jaque, cord, mapPosPiezas);
-        posiblesCapturas = tapoJaque("captura", jaque, cord, mapPosPiezas);
+        posiblesMovs = tapoJaque("movs", jaque, cord, mapPosPiezas, false, false);
+        posiblesCapturas = tapoJaque("captura", jaque, cord, mapPosPiezas, false, false);
     } else {
-        posiblesMovs = posiblesJugadas("movs", cord, mapPosPiezas, primerMRB, primerMRN);
-        posiblesCapturas = posiblesJugadas("captura", cord, mapPosPiezas, primerMRB, primerMRN);
+        posiblesMovs = tapoJaque("movs", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
+        posiblesCapturas = tapoJaque("captura", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
     }
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);

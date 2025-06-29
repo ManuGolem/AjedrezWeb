@@ -51,22 +51,28 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                      piezas: "negras",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  })
+                    piezas: "negras",
+                    lugar: posicion,
+                    rey: reyOponente,
+                })
                 : setJaque({
-                      piezas: "blancas",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  }));
+                    piezas: "blancas",
+                    lugar: posicion,
+                    rey: reyOponente,
+                }));
         return true;
     }
     return false;
 }
-function tapoJaque(accion, jaque, cords, mapPosPiezas) {
+function tapoJaque(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     const pieza = mapPosPiezas[cords];
-    const turno = jaque.piezas === "negras" ? true : false;
+    //Turno aca representa el turno opuesto
+    let turno;
+    if (jaque.piezas) {
+        turno = jaque.piezas === "negras" ? true : false;
+    } else {
+        turno = esBlanco(mapPosPiezas[cords]) ? false : true;
+    }
     let posiblesTapadas = [];
     const piezasBlancas = [];
     const piezasNegras = [];
@@ -80,7 +86,7 @@ function tapoJaque(accion, jaque, cords, mapPosPiezas) {
         }
     });
     if (accion === "movs") {
-        const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
+        const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
         //Jugadas para tapar
         posiblesJugadasPieza.forEach((jugada) => {
             const copiaMap = { ...mapPosPiezas };
@@ -105,7 +111,7 @@ function tapoJaque(accion, jaque, cords, mapPosPiezas) {
             !hayProblema && posiblesTapadas.push(jugada);
         });
     } else {
-        const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, false, false);
+        const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
         posiblesCapturasPieza.forEach((captura) => {
             const copiaMap = { ...mapPosPiezas };
             copiaMap[cords] = "";
