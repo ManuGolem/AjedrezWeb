@@ -2,7 +2,7 @@ import data from "../dictionary.json";
 export function ModalDerecho({ reiniciarTablero, jugadas }) {
     function esPeon(pieza) {
         const piezaCode = pieza.charCodeAt(0);
-        if (piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0) && pieza !== "b") {
+        if ((piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0)) || pieza == "O") {
             return false;
         } else {
             return pieza;

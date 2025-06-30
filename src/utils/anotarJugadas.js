@@ -19,16 +19,47 @@ export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movim
         }
     } else {
         if (esBlanco(pieza)) {
-            const nuevoMov = pieza !== "p" ? [pieza + posicion + jaque] : [posicion + jaque];
-            setMovimientos(nuevoMov);
-            const jugadaNueva = jugadas;
-            jugadaNueva.push(nuevoMov);
-            setJugadas(jugadaNueva);
+            if (pieza === "k") {
+                let nuevoMov;
+                //Veo si el movimiento es un enroque
+                if (posicion === "g1") {
+                    nuevoMov = ["O-O" + jaque];
+                } else if (posicion === "c1") {
+                    nuevoMov = ["O-O-O" + jaque];
+                } else {
+                    nuevoMov = [pieza + posicion + jaque];
+                }
+                setMovimientos(nuevoMov);
+                const jugadaNueva = jugadas;
+                jugadaNueva.push(nuevoMov);
+                setJugadas(jugadaNueva);
+            } else {
+                const nuevoMov = pieza !== "p" ? [pieza + posicion + jaque] : [posicion + jaque];
+                setMovimientos(nuevoMov);
+                const jugadaNueva = jugadas;
+                jugadaNueva.push(nuevoMov);
+                setJugadas(jugadaNueva);
+            }
         } else {
-            posicion = (pieza !== "P" ? pieza + posicion : posicion) + jaque;
-            const nuevoMov = movimientos;
-            nuevoMov.push(posicion);
-            setMovimientos(nuevoMov);
+            if (pieza === "K") {
+                let nuevoMov;
+                //Veo si el movimiento es un enroque
+                if (posicion === "g8") {
+                    nuevoMov = "O-O" + jaque;
+                } else if (posicion === "c8") {
+                    nuevoMov = "O-O-O" + jaque;
+                } else {
+                    nuevoMov = pieza + posicion + jaque;
+                }
+                const copiaMovs = movimientos;
+                copiaMovs.push(nuevoMov);
+                setMovimientos(copiaMovs);
+            } else {
+                posicion = (pieza !== "P" ? pieza + posicion : posicion) + jaque;
+                const nuevoMov = movimientos;
+                nuevoMov.push(posicion);
+                setMovimientos(nuevoMov);
+            }
         }
     }
 }

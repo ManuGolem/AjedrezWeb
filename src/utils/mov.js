@@ -226,7 +226,7 @@ function movimientosAlfil(letraCode, numero, mapPosPiezas, letra) {
             const posicion = nuevaLetra + nuevoNumero;
 
             if (!esPosicionValida(nuevaLetra, nuevoNumero)) break;
-            if (letra === "b" || letra === "q") {
+            if (letra === "x" || letra === "q") {
                 if (mapPosPiezas[posicion]) {
                     if (!esBlanco(mapPosPiezas[posicion])) {
                         capturas.push(posicion);
@@ -307,8 +307,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -318,7 +318,7 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
         posiblesCapturas = capturas;
 
         posiblesMovs = movimientos;
-    } else if (pieza === "b" || pieza === "B") {
+    } else if (pieza === "x" || pieza === "X") {
         //Alfiles
         const { movimientos, capturas } = movimientosAlfil(letraCode, numero, mapPosPiezas, pieza);
 

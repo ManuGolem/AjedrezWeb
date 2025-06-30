@@ -1,7 +1,7 @@
 import { posiblesJugadas } from "./mov";
 function esBlanco(pieza) {
     const letra = pieza.split("")[0];
-    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "b") {
+    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "x") {
         return true;
     }
     return false;
@@ -51,15 +51,15 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                    piezas: "negras",
-                    lugar: posicion,
-                    rey: reyOponente,
-                })
+                      piezas: "negras",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  })
                 : setJaque({
-                    piezas: "blancas",
-                    lugar: posicion,
-                    rey: reyOponente,
-                }));
+                      piezas: "blancas",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  }));
         return true;
     }
     return false;
