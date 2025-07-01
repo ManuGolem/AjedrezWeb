@@ -51,20 +51,20 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                      piezas: "negras",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  })
+                    piezas: "negras",
+                    lugar: posicion,
+                    rey: reyOponente,
+                })
                 : setJaque({
-                      piezas: "blancas",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  }));
+                    piezas: "blancas",
+                    lugar: posicion,
+                    rey: reyOponente,
+                }));
         return true;
     }
     return false;
 }
-function tapoJaque(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
+function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     const pieza = mapPosPiezas[cords];
     //Turno aca representa el turno opuesto
     let turno;
@@ -137,4 +137,4 @@ function tapoJaque(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     }
     return posiblesTapadas;
 }
-export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio, tapoJaque };
+export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio, movsLegales };

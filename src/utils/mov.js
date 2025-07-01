@@ -1,4 +1,4 @@
-import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque, tapoJaque } from "./utils";
+import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque, movsLegales } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
 const MovsCaballo = [
     [1, 2],
@@ -13,7 +13,7 @@ const MovsCaballo = [
 //Aca deberia usar un state
 let piezaSeleccionada;
 export function capturarPieza(
-    columna,
+    cordenada,
     mapPosPiezas,
     setMapPiezas,
     setPosibles,
@@ -29,17 +29,17 @@ export function capturarPieza(
     setJaque,
 ) {
     //Parte para guardar las piezas que se van capturando
-    const piezaACapturar = mapPosPiezas[columna];
+    const piezaACapturar = mapPosPiezas[cordenada];
     const copiaPiezas = piezasCapturadas;
     const colorPieza = esBlanco(piezaACapturar) ? "negras" : "blancas";
     copiaPiezas[colorPieza].push(piezaACapturar);
     setPiezasCapturadas(copiaPiezas);
     //Logica para mover la pieza
-    const posicion = columna;
+    const posicion = cordenada;
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
     copiaMap[piezaSeleccionada] = "";
-    copiaMap[columna] = piezaAMover;
+    copiaMap[cordenada] = piezaAMover;
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
@@ -274,10 +274,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 }
             }
         }
-
         const captura1 = String.fromCharCode(letraCode + 1) + (numero + 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero + 1);
-
         mapPosPiezas[captura1] && !esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
         mapPosPiezas[captura2] && !esBlanco(mapPosPiezas[captura2]) && posiblesCapturas.push(captura2);
     } else if (pieza === "P") {
@@ -307,8 +305,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -351,12 +349,12 @@ export function mostrarPath(cord, mapPosPiezas, setPosibles, setCapturas, primer
     let posiblesMovs;
     let posiblesCapturas;
     if (jaque.piezas) {
-        //Devuelvo true si me tapo del jaque con esa pieza, ademas devuelvo las posibles jugadas para taparme del jaque
-        posiblesMovs = tapoJaque("movs", jaque, cord, mapPosPiezas, false, false);
-        posiblesCapturas = tapoJaque("captura", jaque, cord, mapPosPiezas, false, false);
+        //Si hay jaques no se puede enrocar
+        posiblesMovs = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
+        posiblesCapturas = movsLegales("captura", jaque, cord, mapPosPiezas, false, false);
     } else {
-        posiblesMovs = tapoJaque("movs", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
-        posiblesCapturas = tapoJaque("captura", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
+        posiblesMovs = movsLegales("movs", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
+        posiblesCapturas = movsLegales("captura", jaque, cord, mapPosPiezas, primerMRB, primerMRN);
     }
     piezaSeleccionada = cord;
     setPosibles(posiblesMovs);
