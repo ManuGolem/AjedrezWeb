@@ -1,5 +1,6 @@
 import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque, movsLegales } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
+let posicionCapturaAlPaso = "";
 const MovsCaballo = [
     [1, 2],
     [2, 1],
@@ -65,9 +66,7 @@ export function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
-    jaque,
 ) {
-    //Resto de la logica, solo mueve la pieza
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
     //Caso en el que haya que hacer un enroque
@@ -91,7 +90,24 @@ export function moverPieza(
         piezaAMover === "K" && setMRN(false);
     } else {
         //Resto de piezas
-        //- [ ] Me falta hacer la captura al paso
+        //Caso captura al paso, hay que setear a todo peon que avanze dos casillas.
+        if (piezaAMover === "p" || piezaAMover === "P") {
+            if (posicionCapturaAlPaso !== "" && posicionCapturaAlPaso.split("")[0] === posicion.split("")[0]) {
+                copiaMap[posicionCapturaAlPaso] = "";
+                posicionCapturaAlPaso = "";
+            }
+            if (Math.abs(posicion.split("")[1] - piezaSeleccionada.split("")[1]) > 1) {
+                const posiblePeon1 = String.fromCharCode(posicion.split("")[0].charCodeAt(0) + 1) + posicion.split("")[1];
+                const posiblePeon2 = String.fromCharCode(posicion.split("")[0].charCodeAt(0) - 1) + posicion.split("")[1];
+                if (
+                    (turno && (mapPosPiezas[posiblePeon1] === "P" || mapPosPiezas[posiblePeon2] === "P")) ||
+                    (!turno && (mapPosPiezas[posiblePeon1] === "p" || mapPosPiezas[posiblePeon2] === "p"))
+                ) {
+                    posicionCapturaAlPaso = posicion;
+                    console.log(posicionCapturaAlPaso);
+                }
+            }
+        }
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = piezaAMover;
     }
@@ -274,6 +290,10 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 }
             }
         }
+        if (posicionCapturaAlPaso !== "") {
+            const posicionNueva = posicionCapturaAlPaso.split("")[0] + (Number(posicionCapturaAlPaso.split("")[1]) + 1);
+            posiblesMovs.push(posicionNueva);
+        }
         const captura1 = String.fromCharCode(letraCode + 1) + (numero + 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero + 1);
         mapPosPiezas[captura1] && !esBlanco(mapPosPiezas[captura1]) && posiblesCapturas.push(captura1);
@@ -290,6 +310,10 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 }
             }
         }
+        if (posicionCapturaAlPaso !== "") {
+            const posicionNueva = posicionCapturaAlPaso.split("")[0] + (Number(posicionCapturaAlPaso.split("")[1]) - 1);
+            posiblesMovs.push(posicionNueva);
+        }
 
         const captura1 = String.fromCharCode(letraCode + 1) + (numero - 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero - 1);
@@ -305,8 +329,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
