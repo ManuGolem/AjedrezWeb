@@ -1,6 +1,7 @@
 import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque, movsLegales } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
 let posicionCapturaAlPaso = "";
+let captureAlPaso = false;
 const MovsCaballo = [
     [1, 2],
     [2, 1],
@@ -95,6 +96,7 @@ export function moverPieza(
             if (posicionCapturaAlPaso !== "" && posicionCapturaAlPaso.split("")[0] === posicion.split("")[0]) {
                 copiaMap[posicionCapturaAlPaso] = "";
                 posicionCapturaAlPaso = "";
+                captureAlPaso = true;
             }
             if (Math.abs(posicion.split("")[1] - piezaSeleccionada.split("")[1]) > 1) {
                 const posiblePeon1 = String.fromCharCode(posicion.split("")[0].charCodeAt(0) + 1) + posicion.split("")[1];
@@ -104,7 +106,6 @@ export function moverPieza(
                     (!turno && (mapPosPiezas[posiblePeon1] === "p" || mapPosPiezas[posiblePeon2] === "p"))
                 ) {
                     posicionCapturaAlPaso = posicion;
-                    console.log(posicionCapturaAlPaso);
                 }
             }
         }
@@ -114,8 +115,9 @@ export function moverPieza(
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
-    //Llamada para hacer toda la logica de la anotacion de las jugadas
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
+    //Llamada para hacer toda la logica de la anotacion de las anotarJugadas
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso);
+    captureAlPaso = false;
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();

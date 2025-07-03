@@ -1,7 +1,8 @@
 import { esBlanco } from "./utils";
-export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque) {
+export function anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso) {
     const pieza = mapPosPiezas[piezaSeleccionada];
-    const esCaptura = mapPosPiezas[posicion];
+    let esCaptura = mapPosPiezas[posicion];
+    captureAlPaso && (esCaptura = true);
     const jaque = dejoEnJaque ? "+" : "";
     if (esCaptura) {
         const letra = piezaSeleccionada.split("")[0];
