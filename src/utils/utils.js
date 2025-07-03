@@ -64,7 +64,7 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     }
     return false;
 }
-function hayJaque(posicion, mapPosPiezas, turno, setJaque) {
+function hayJaque(mapPosPiezas, turno, setJaque) {
     const piezasBlancas = [];
     const piezasNegras = [];
     Object.entries(mapPosPiezas).forEach(([key, value]) => {

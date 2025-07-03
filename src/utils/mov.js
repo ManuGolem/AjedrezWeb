@@ -44,8 +44,7 @@ export function capturarPieza(
     copiaMap[cordenada] = piezaAMover;
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
-    // const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
+    const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
@@ -115,7 +114,7 @@ export function moverPieza(
     }
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
+    const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las anotarJugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso);
     captureAlPaso = false;
