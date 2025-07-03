@@ -105,17 +105,6 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
         turno = esBlanco(mapPosPiezas[cords]) ? false : true;
     }
     let posiblesTapadas = [];
-    const piezasBlancas = [];
-    const piezasNegras = [];
-    Object.entries(mapPosPiezas).forEach(([key, value]) => {
-        if (value !== "") {
-            if (esBlanco(value)) {
-                piezasBlancas.push(key);
-            } else {
-                piezasNegras.push(key);
-            }
-        }
-    });
 
     if (accion === "movs") {
         const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
@@ -124,22 +113,7 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
             const copiaMap = { ...mapPosPiezas };
             copiaMap[cords] = "";
             copiaMap[jugada] = pieza;
-            let hayProblema = false;
-            if (!turno) {
-                //Juegan blancas -> verificar cada ataque de las piezas negras
-                piezasNegras.forEach((cord) => {
-                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
-                        hayProblema = true;
-                    }
-                });
-            } else {
-                //Negras
-                piezasBlancas.forEach((cord) => {
-                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
-                        hayProblema = true;
-                    }
-                });
-            }
+            const hayProblema = hayJaque(copiaMap, turno, false);
             !hayProblema && posiblesTapadas.push(jugada);
 
             if (pieza === "k") {
@@ -176,22 +150,8 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
             const copiaMap = { ...mapPosPiezas };
             copiaMap[cords] = "";
             copiaMap[captura] = mapPosPiezas[cords];
-            let hayProblema = false;
-            if (!turno) {
-                //Juegan blancas -> verificar cada ataque de las piezas negras
-                piezasNegras.forEach((cord) => {
-                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
-                        hayProblema = true;
-                    }
-                });
-            } else {
-                //Negras
-                piezasBlancas.forEach((cord) => {
-                    if (esJaque(cord, copiaMap, turno, false) && !hayProblema) {
-                        hayProblema = true;
-                    }
-                });
-            }
+            const hayProblema = hayJaque(copiaMap, turno, false);
+
             !hayProblema && posiblesTapadas.push(captura);
         });
     }
