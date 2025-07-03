@@ -51,18 +51,49 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                    piezas: "negras",
-                    lugar: posicion,
-                    rey: reyOponente,
-                })
+                      piezas: "negras",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  })
                 : setJaque({
-                    piezas: "blancas",
-                    lugar: posicion,
-                    rey: reyOponente,
-                }));
+                      piezas: "blancas",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  }));
         return true;
     }
     return false;
+}
+function hayJaque(posicion, mapPosPiezas, turno, setJaque) {
+    const piezasBlancas = [];
+    const piezasNegras = [];
+    Object.entries(mapPosPiezas).forEach(([key, value]) => {
+        if (value !== "") {
+            if (esBlanco(value)) {
+                piezasBlancas.push(key);
+            } else {
+                piezasNegras.push(key);
+            }
+        }
+    });
+    let hayProblema = false;
+    if (!turno) {
+        //Posible jaque a blancas
+        piezasNegras.forEach((cord) => {
+            if (esJaque(cord, mapPosPiezas, turno, setJaque) && !hayProblema) {
+                hayProblema = true;
+            }
+        });
+    } else {
+        //Posible jaque a Negras
+        piezasBlancas.forEach((cord) => {
+            if (esJaque(cord, mapPosPiezas, turno, setJaque) && !hayProblema) {
+                hayProblema = true;
+            }
+        });
+    }
+
+    return hayProblema;
 }
 function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     const pieza = mapPosPiezas[cords];
@@ -85,6 +116,7 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
             }
         }
     });
+
     if (accion === "movs") {
         const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
         //Jugadas para tapar
@@ -109,6 +141,34 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
                 });
             }
             !hayProblema && posiblesTapadas.push(jugada);
+
+            if (pieza === "k") {
+                // Enroque blanco corto (g1)
+                if (posiblesTapadas.includes("g1")) {
+                    if (!posiblesTapadas.includes("f1")) {
+                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "g1");
+                    }
+                }
+                // Enroque blanco largo (c1)
+                if (posiblesTapadas.includes("c1")) {
+                    if (!posiblesTapadas.includes("d1")) {
+                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "c1");
+                    }
+                }
+            } else if (pieza === "K") {
+                // Enroque negro corto (g8)
+                if (posiblesTapadas.includes("g8")) {
+                    if (!posiblesTapadas.includes("f8")) {
+                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "g8");
+                    }
+                }
+                // Enroque negro largo (c8)
+                if (posiblesTapadas.includes("c8")) {
+                    if (!posiblesTapadas.includes("d8")) {
+                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "c8");
+                    }
+                }
+            }
         });
     } else {
         const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
@@ -137,4 +197,4 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     }
     return posiblesTapadas;
 }
-export { esBlanco, esMiTurno, esJaque, esPosicionValida, hayPiezasEntreMedio, movsLegales };
+export { esBlanco, esMiTurno, esPosicionValida, hayPiezasEntreMedio, movsLegales, hayJaque };

@@ -1,4 +1,4 @@
-import { esBlanco, esPosicionValida, hayPiezasEntreMedio, esJaque, movsLegales } from "./utils";
+import { esBlanco, esPosicionValida, hayPiezasEntreMedio, movsLegales, hayJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
 let posicionCapturaAlPaso = "";
 let captureAlPaso = false;
@@ -44,7 +44,8 @@ export function capturarPieza(
     copiaMap[cordenada] = piezaAMover;
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
+    const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
+    // const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
     setMapPiezas(copiaMap);
@@ -114,7 +115,7 @@ export function moverPieza(
     }
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = esJaque(posicion, copiaMap, turno, setJaque);
+    const dejoEnJaque = hayJaque(posicion, copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las anotarJugadas
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso);
     captureAlPaso = false;
@@ -123,13 +124,7 @@ export function moverPieza(
     setCapturas();
     setTurno(!turno);
 }
-function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimientos) {
-    const posInicial = letraTorre == "r" ? "e1" : "e8";
-    !hayPiezasEntreMedio(posInicial, torre, mapPosPiezas, "k") &&
-        esPosicionValida(letra, numero) &&
-        mapPosPiezas[torre] === letraTorre &&
-        movimientos.push(letra + numero);
-}
+
 function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     const movimientos = [];
     const capturas = [];
@@ -174,7 +169,14 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
     });
     return { movimientos, capturas };
 }
-
+function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimientos) {
+    const posInicial = letraTorre == "r" ? "e1" : "e8";
+    const turnoOpuesto = posInicial === "e1" ? false : true;
+    !hayPiezasEntreMedio(posInicial, torre, mapPosPiezas, "k") &&
+        esPosicionValida(letra, numero) &&
+        mapPosPiezas[torre] === letraTorre &&
+        movimientos.push(letra + numero);
+}
 function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primerMRN) {
     const movimientos = [];
     const capturas = [];
