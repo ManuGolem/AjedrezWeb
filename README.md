@@ -6,6 +6,7 @@ A simplified single-player chess application inspired by chess.com, built with R
 
 - **Complete Chess Rules**:
     - Piece movement
+        - Passant move
     - Check detection
     - Turn management
 - **Move Notation**:
@@ -25,16 +26,16 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
 
 ## Future Improvements
 
-- [ ] Passant move
 - [ ] Checkmate detection
+- [ ] Coronation modal
 - [ ] Move history tracking
 - [ ] Game status indicators
+- [ ] Save game state locally
+- [ ] PGN game import/export
 - [ ] Sound
 - [ ] Implement game timer
-- [ ] Add difficulty levels vs AI
-- [ ] Save game state locally
 - [ ] Multiplayer
-- [ ] PGN game import/export
+- [ ] Add difficulty levels vs AI
 
 # Autor
 
