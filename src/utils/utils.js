@@ -1,4 +1,37 @@
 import { posiblesJugadas } from "./mov";
+function esJaqueMate(jaque, mapPosPiezas) {
+    const turno = jaque.piezas === "blancas";
+    const piezas = [];
+    if (turno) {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    } else {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (!esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    }
+    const movimientos = [];
+    piezas.forEach((cord) => {
+        const mov = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
+        if (mov.length !== 0) {
+            movimientos.push(mov);
+        }
+    });
+    if (movimientos.length === 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
 function esBlanco(pieza) {
     const letra = pieza.split("")[0];
     if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "x") {
@@ -51,15 +84,15 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                      piezas: "negras",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  })
+                    piezas: "negras",
+                    lugar: posicion,
+                    rey: reyOponente,
+                })
                 : setJaque({
-                      piezas: "blancas",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  }));
+                    piezas: "blancas",
+                    lugar: posicion,
+                    rey: reyOponente,
+                }));
         return true;
     }
     return false;
@@ -157,4 +190,4 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     }
     return posiblesTapadas;
 }
-export { esBlanco, esMiTurno, esPosicionValida, hayPiezasEntreMedio, movsLegales, hayJaque };
+export { esBlanco, esMiTurno, esPosicionValida, esJaqueMate, hayPiezasEntreMedio, movsLegales, hayJaque };
