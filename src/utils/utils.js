@@ -1,51 +1,5 @@
 import { posiblesJugadas } from "./mov";
-function esJaqueMate(jaque, mapPosPiezas) {
-    const turno = jaque.piezas === "blancas";
-    const piezas = [];
-    if (turno) {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (esBlanco(value)) {
-                    piezas.push(key);
-                }
-            }
-        });
-    } else {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (!esBlanco(value)) {
-                    piezas.push(key);
-                }
-            }
-        });
-    }
-    const movimientos = [];
-    piezas.forEach((cord) => {
-        const mov = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
-        if (mov.length !== 0) {
-            movimientos.push(mov);
-        }
-    });
-    if (movimientos.length === 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
-function esBlanco(pieza) {
-    const letra = pieza.split("")[0];
-    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "x") {
-        return true;
-    }
-    return false;
-}
-function esMiTurno(turno, pos, mapPosPiezas) {
-    const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
-    return devolver;
-}
-function esPosicionValida(letra, numero) {
-    return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
-}
+import { esBlanco } from "./esAlgo";
 function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
     if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
         const partesInicial = posInicial.split("");
@@ -190,4 +144,4 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     }
     return posiblesTapadas;
 }
-export { esBlanco, esMiTurno, esPosicionValida, esJaqueMate, hayPiezasEntreMedio, movsLegales, hayJaque };
+export { hayPiezasEntreMedio, movsLegales, hayJaque };

@@ -2,8 +2,8 @@ import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { useStartTablero } from "../Hooks/useStartTablero";
 import { mostrarPath, moverPieza, capturarPieza } from "../utils/mov";
-import { esMiTurno, esJaqueMate } from "../utils/utils";
-export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCapturadas, jugadas, setJugadas }) {
+import { esMiTurno, esJaqueMate } from "../utils/esAlgo";
+export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCapturadas, jugadas, setJugadas, setMate, setAhogado }) {
     const [mapPosPiezas, setMapPiezas] = useState();
     const [tablero, setTablero] = useState();
     const [posibles, setPosibles] = useState();
@@ -13,14 +13,6 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
     const [primerMRB, setMRB] = useState(true);
     const [primerMRN, setMRN] = useState(true);
     const [jaque, setJaque] = useState({});
-    const [mate, setMate] = useState();
-    useEffect(() => {
-        if (Object.keys(jaque).length > 0) {
-            if (esJaqueMate(jaque, mapPosPiezas)) {
-                setMate(true);
-            }
-        }
-    }, [jaque]);
     useEffect(() => {
         setTablero(tableroCords);
         setMapPiezas(piezas);
@@ -35,6 +27,8 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
         });
         setJaque({});
         setTurno(true);
+        setMate();
+        setAhogado();
     }, [tableroCords, piezas]);
     function mostrarPiezas(columna) {
         return mapPosPiezas[columna] ? (
@@ -73,6 +67,8 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                                     setJugadas,
                                     setJaque,
                                     jaque,
+                                    setAhogado,
+                                    setMate,
                                 )
                             }
                         >
@@ -106,6 +102,9 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                                     movimientos,
                                     setMovimientos,
                                     setJaque,
+                                    jaque,
+                                    setAhogado,
+                                    setMate,
                                 )
                             }
                         ></span>
@@ -125,7 +124,6 @@ export function Tablero({ start, turno, setTurno, piezasCapturadas, setPiezasCap
                         </div>
                     )),
                 )}
-            {mate && console.log("HAY MATE")}
         </article>
     );
 }

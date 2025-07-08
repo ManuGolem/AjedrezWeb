@@ -1,5 +1,6 @@
-import { esBlanco, esPosicionValida, hayPiezasEntreMedio, movsLegales, hayJaque } from "./utils";
+import { hayPiezasEntreMedio, movsLegales, hayJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
+import { esAhogado, esBlanco, esPosicionValida, esJaqueMate } from "./esAlgo";
 let posicionCapturaAlPaso = "";
 let captureAlPaso = false;
 const MovsCaballo = [
@@ -29,6 +30,9 @@ export function capturarPieza(
     movimientos,
     setMovimientos,
     setJaque,
+    jaque,
+    setAhogado,
+    setMate,
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[cordenada];
@@ -46,7 +50,9 @@ export function capturarPieza(
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque);
+    const doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    esAhogado(turno, copiaMap, setAhogado);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate);
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
@@ -67,6 +73,9 @@ export function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
+    jaque,
+    setAhogado,
+    setMate,
 ) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
@@ -115,8 +124,10 @@ export function moverPieza(
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
-    //Llamada para hacer toda la logica de la anotacion de las anotarJugadas
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso);
+
+    const doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    esAhogado(turno, mapPosPiezas, setAhogado);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate);
     captureAlPaso = false;
     setMapPiezas(copiaMap);
     setPosibles();
@@ -332,8 +343,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {

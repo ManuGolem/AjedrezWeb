@@ -6,6 +6,9 @@ import { PiezasCapturadas } from "./Components/PiezasCapturadas";
 export function App() {
     const [reinciar, setReiniciar] = useState(true);
     const [turno, setTurno] = useState(true);
+
+    const [ahogado, setAhogado] = useState();
+    const [mate, setMate] = useState();
     const [piezasCapturadas, setPiezasCapturadas] = useState({
         blancas: [],
         negras: [],
@@ -33,6 +36,8 @@ export function App() {
                     setPiezasCapturadas={setPiezasCapturadas}
                     jugadas={jugadas}
                     setJugadas={setJugadas}
+                    setMate={setMate}
+                    setAhogado={setAhogado}
                 />
                 <div className="tableroCordsLetras">
                     {letras.map((le) => (
@@ -41,7 +46,7 @@ export function App() {
                 </div>
                 <PiezasCapturadas color="blancas" piezasCapturadas={piezasCapturadas} />
             </div>
-            <ModalDerecho reiniciarTablero={toggleReiniciar} jugadas={jugadas} />
+            <ModalDerecho reiniciarTablero={toggleReiniciar} mate={mate} ahogado={ahogado} jugadas={jugadas} />
         </main>
     );
 }

@@ -1,0 +1,63 @@
+import { movsLegales } from "./utils";
+function esAhogado(turno, mapPosPiezas, setAhogado) {
+    //Si es ahogado la partida termina 1/2 1/2 , se setea en setAhogado
+}
+
+function esPeon(pieza) {
+    const piezaCode = pieza.charCodeAt(0);
+    if ((piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0)) || pieza == "O") {
+        return false;
+    } else {
+        return pieza;
+    }
+}
+function esJaqueMate(jaque, mapPosPiezas, setMate) {
+    const turno = jaque.piezas === "blancas";
+    const piezas = [];
+    if (turno) {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    } else {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (!esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    }
+    const movimientos = [];
+    piezas.forEach((cord) => {
+        const mov = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
+        if (mov.length !== 0) {
+            movimientos.push(mov);
+        }
+    });
+    if (movimientos.length === 0) {
+        setMate(true);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function esBlanco(pieza) {
+    const letra = pieza.split("")[0];
+    if (letra === "p" || letra === "n" || letra === "r" || letra === "q" || letra === "k" || letra === "x") {
+        return true;
+    }
+    return false;
+}
+function esMiTurno(turno, pos, mapPosPiezas) {
+    const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
+    return devolver;
+}
+function esPosicionValida(letra, numero) {
+    return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
+}
+export { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esPeon, esMiTurno };

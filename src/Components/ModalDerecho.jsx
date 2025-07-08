@@ -1,13 +1,17 @@
+import { useEffect, useState } from "react";
 import data from "../dictionary.json";
-export function ModalDerecho({ reiniciarTablero, jugadas }) {
-    function esPeon(pieza) {
-        const piezaCode = pieza.charCodeAt(0);
-        if ((piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0)) || pieza == "O") {
-            return false;
+import { esPeon } from "../utils/esAlgo";
+export function ModalDerecho({ reiniciarTablero, jugadas, mate, ahogado }) {
+    const [resultado, setResultado] = useState(false);
+    useEffect(() => {
+        if (mate) {
+            setResultado("Mate");
+        } else if (ahogado) {
+            setResultado("1/2-1/2");
         } else {
-            return pieza;
+            setResultado(false);
         }
-    }
+    }, [mate, ahogado]);
     function escribirMovimiento(mov) {
         const partes = mov.split("");
         const letra = esPeon(partes[0]);
@@ -38,6 +42,12 @@ export function ModalDerecho({ reiniciarTablero, jugadas }) {
                         </p>
                     ))}
             </div>
+            {resultado !== false && (
+                <div>
+                    <h1>Fin de la partida</h1>
+                    <h2>Resultado: {resultado}</h2>
+                </div>
+            )}
         </article>
     );
 }
