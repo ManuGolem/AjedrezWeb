@@ -1,6 +1,41 @@
 import { movsLegales } from "./utils";
 function esAhogado(turno, mapPosPiezas, setAhogado) {
-    //Si es ahogado la partida termina 1/2 1/2 , se setea en setAhogado
+    const turnoOpuesto = !turno;
+    const piezas = [];
+    if (turno) {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    } else {
+        Object.entries(mapPosPiezas).forEach(([key, value]) => {
+            if (value !== "") {
+                if (!esBlanco(value)) {
+                    piezas.push(key);
+                }
+            }
+        });
+    }
+    const movimientos = [];
+    piezas.forEach((cord) => {
+        const mov = movsLegales("movs", false, cord, mapPosPiezas, false, false);
+        if (mov.length !== 0) {
+            movimientos.push(mov);
+        }
+        const captura = movsLegales("captura", false, cord, mapPosPiezas, false, false);
+        if (captura.length !== 0) {
+            movimientos.push(captura);
+        }
+    });
+    if (movimientos.length === 0) {
+        setAhogado(true);
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function esPeon(pieza) {
@@ -36,6 +71,10 @@ function esJaqueMate(jaque, mapPosPiezas, setMate) {
         const mov = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
         if (mov.length !== 0) {
             movimientos.push(mov);
+        }
+        const captura = movsLegales("captura", false, cord, mapPosPiezas, false, false);
+        if (captura.length !== 0) {
+            movimientos.push(captura);
         }
     });
     if (movimientos.length === 0) {
