@@ -1,8 +1,7 @@
 import { movsLegales } from "./utils";
 function esAhogado(turno, mapPosPiezas, setAhogado) {
-    const turnoOpuesto = !turno;
     const piezas = [];
-    if (turno) {
+    if (!turno) {
         Object.entries(mapPosPiezas).forEach(([key, value]) => {
             if (value !== "") {
                 if (esBlanco(value)) {
@@ -72,7 +71,7 @@ function esJaqueMate(jaque, mapPosPiezas, setMate) {
         if (mov.length !== 0) {
             movimientos.push(mov);
         }
-        const captura = movsLegales("captura", false, cord, mapPosPiezas, false, false);
+        const captura = movsLegales("captura", jaque, cord, mapPosPiezas, false, false);
         if (captura.length !== 0) {
             movimientos.push(captura);
         }

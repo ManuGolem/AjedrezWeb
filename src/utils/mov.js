@@ -50,7 +50,10 @@ export function capturarPieza(
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
     //Llamada para hacer toda la logica de la anotacion de las jugadas
-    const doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    let doyMate = false;
+    if (jaque.piezas) {
+        doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    }
     esAhogado(turno, copiaMap, setAhogado);
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate);
     setMapPiezas(copiaMap);
@@ -124,9 +127,11 @@ export function moverPieza(
     setJaque({});
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
-
-    const doyMate = esJaqueMate(jaque, copiaMap, setMate);
-    esAhogado(turno, mapPosPiezas, setAhogado);
+    let doyMate = false;
+    if (jaque.piezas) {
+        doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    }
+    esAhogado(turno, copiaMap, setAhogado);
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate);
     captureAlPaso = false;
     setMapPiezas(copiaMap);

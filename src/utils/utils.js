@@ -102,8 +102,7 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
             copiaMap[jugada] = pieza;
             const hayProblema = hayJaque(copiaMap, turno, false);
             !hayProblema && posiblesTapadas.push(jugada);
-
-            if (pieza === "k") {
+            if (pieza === "k" && primerMRB) {
                 // Enroque blanco corto (g1)
                 if (posiblesTapadas.includes("g1")) {
                     if (!posiblesTapadas.includes("f1")) {
@@ -116,7 +115,7 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
                         posiblesTapadas = posiblesTapadas.filter((x) => x !== "c1");
                     }
                 }
-            } else if (pieza === "K") {
+            } else if (pieza === "K" && primerMRN) {
                 // Enroque negro corto (g8)
                 if (posiblesTapadas.includes("g8")) {
                     if (!posiblesTapadas.includes("f8")) {
