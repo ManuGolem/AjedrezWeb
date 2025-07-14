@@ -1,8 +1,9 @@
 import { hayPiezasEntreMedio, movsLegales, hayJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
-import { esAhogado, esBlanco, esPosicionValida, esJaqueMate } from "./esAlgo";
+import { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esCapturaAlPasoValida } from "./esAlgo";
 let posicionCapturaAlPaso = "";
 let captureAlPaso = false;
+let secondChance = false;
 const MovsCaballo = [
     [1, 2],
     [2, 1],
@@ -105,7 +106,9 @@ export function moverPieza(
         //Resto de piezas
         //Caso captura al paso, hay que setear a todo peon que avanze dos casillas.
         if (piezaAMover === "p" || piezaAMover === "P") {
+            console.log(posicion, posicionCapturaAlPaso);
             if (posicionCapturaAlPaso !== "" && posicionCapturaAlPaso.split("")[0] === posicion.split("")[0]) {
+                console.log(posicionCapturaAlPaso, posicion);
                 copiaMap[posicionCapturaAlPaso] = "";
                 posicionCapturaAlPaso = "";
                 captureAlPaso = true;
@@ -118,6 +121,7 @@ export function moverPieza(
                     (!turno && (mapPosPiezas[posiblePeon1] === "p" || mapPosPiezas[posiblePeon2] === "p"))
                 ) {
                     posicionCapturaAlPaso = posicion;
+                    secondChance = true;
                 }
             }
         }
@@ -134,6 +138,11 @@ export function moverPieza(
     esAhogado(turno, copiaMap, setAhogado);
     anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate);
     captureAlPaso = false;
+    if (secondChance) {
+        secondChance = false;
+    } else {
+        posicionCapturaAlPaso = "";
+    }
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
@@ -311,7 +320,10 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
         }
         if (posicionCapturaAlPaso !== "") {
             const posicionNueva = posicionCapturaAlPaso.split("")[0] + (Number(posicionCapturaAlPaso.split("")[1]) + 1);
-            posiblesMovs.push(posicionNueva);
+            //Aca tengo que ver que posicionNueva sea posible para los peones
+            if (esCapturaAlPasoValida(posicionNueva, cord)) {
+                posiblesMovs.push(posicionNueva);
+            }
         }
         const captura1 = String.fromCharCode(letraCode + 1) + (numero + 1);
         const captura2 = String.fromCharCode(letraCode - 1) + (numero + 1);
@@ -331,7 +343,9 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
         }
         if (posicionCapturaAlPaso !== "") {
             const posicionNueva = posicionCapturaAlPaso.split("")[0] + (Number(posicionCapturaAlPaso.split("")[1]) - 1);
-            posiblesMovs.push(posicionNueva);
+            if (esCapturaAlPasoValida(posicionNueva, cord)) {
+                posiblesMovs.push(posicionNueva);
+            }
         }
 
         const captura1 = String.fromCharCode(letraCode + 1) + (numero - 1);

@@ -98,4 +98,19 @@ function esMiTurno(turno, pos, mapPosPiezas) {
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
 }
-export { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esPeon, esMiTurno };
+function esCapturaAlPasoValida(peonACapturar, peonCaptura) {
+    const cordenadas = peonACapturar.split("");
+    const letra = cordenadas[0];
+    const numero = Number(cordenadas[1]);
+    const cordenadasAProbar = peonCaptura.split("");
+    const letraPrueba = cordenadasAProbar[0];
+    const numeroPrueba = Number(cordenadasAProbar[1]);
+    if (Math.abs(numero - numeroPrueba) > 1) {
+        return false;
+    }
+    if (Math.abs(letra.charCodeAt(0) - letraPrueba.charCodeAt(0)) > 1) {
+        return false;
+    }
+    return true;
+}
+export { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
