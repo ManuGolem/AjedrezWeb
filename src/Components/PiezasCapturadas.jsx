@@ -1,5 +1,7 @@
 import data from "../dictionary.json";
-export function PiezasCapturadas({ color, piezasCapturadas }) {
+import { useGame } from "../context";
+export function PiezasCapturadas({ color }) {
+    const { piezasCapturadas } = useGame();
     return (
         <div className="piezasCapturadas">
             <h1>{color == "negras" ? "Negras" : "Blancas"}</h1>

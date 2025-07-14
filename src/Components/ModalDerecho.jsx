@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import data from "../dictionary.json";
 import { esPeon } from "../utils/esAlgo";
-export function ModalDerecho({ reiniciarTablero, jugadas, mate, ahogado }) {
+import { useGame } from "../context";
+export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
+    const { jugadas, mate, ahogado } = useGame();
     useEffect(() => {
         if (mate) {
             setResultado("Mate");
