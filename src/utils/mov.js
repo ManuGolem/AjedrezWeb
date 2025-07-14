@@ -1,5 +1,6 @@
-import { hayPiezasEntreMedio, movsLegales, hayJaque } from "./utils";
+import { movsLegales, hayJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
+import { hacerEnroque } from "./hacer";
 import { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esCapturaAlPasoValida } from "./esAlgo";
 let posicionCapturaAlPaso = "";
 let captureAlPaso = false;
@@ -106,9 +107,7 @@ export function moverPieza(
         //Resto de piezas
         //Caso captura al paso, hay que setear a todo peon que avanze dos casillas.
         if (piezaAMover === "p" || piezaAMover === "P") {
-            console.log(posicion, posicionCapturaAlPaso);
             if (posicionCapturaAlPaso !== "" && posicionCapturaAlPaso.split("")[0] === posicion.split("")[0]) {
-                console.log(posicionCapturaAlPaso, posicion);
                 copiaMap[posicionCapturaAlPaso] = "";
                 posicionCapturaAlPaso = "";
                 captureAlPaso = true;
@@ -192,14 +191,6 @@ function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
         }
     });
     return { movimientos, capturas };
-}
-function hacerEnroque(letraTorre, letra, numero, torre, mapPosPiezas, movimientos) {
-    const posInicial = letraTorre == "r" ? "e1" : "e8";
-    const turnoOpuesto = posInicial === "e1" ? false : true;
-    !hayPiezasEntreMedio(posInicial, torre, mapPosPiezas, "k") &&
-        esPosicionValida(letra, numero) &&
-        mapPosPiezas[torre] === letraTorre &&
-        movimientos.push(letra + numero);
 }
 function movimientoRey(letraCode, numero, mapPosPiezas, letra, primerMRB, primerMRN) {
     const movimientos = [];
