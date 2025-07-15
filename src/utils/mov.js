@@ -131,7 +131,7 @@ export function moverPieza(
     //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
     const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
     let doyMate = false;
-    if (jaque.piezas) {
+    if (dejoEnJaque) {
         doyMate = esJaqueMate(jaque, copiaMap, setMate);
     }
     esAhogado(turno, copiaMap, setAhogado);
@@ -353,8 +353,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
