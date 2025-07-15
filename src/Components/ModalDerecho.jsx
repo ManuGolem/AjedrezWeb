@@ -4,12 +4,12 @@ import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const { jugadas, mate, ahogado } = useGame();
+    const { jugadas, mate, ahogado, jaque } = useGame();
     useEffect(() => {
         if (mate) {
-            setResultado("Mate");
+            setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
         } else if (ahogado) {
-            setResultado("1/2-1/2");
+            setResultado("Rey ahogado (1/2-1/2)");
         } else {
             setResultado(false);
         }
