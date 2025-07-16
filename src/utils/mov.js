@@ -1,7 +1,7 @@
 import { movsLegales, hayJaque } from "./utils";
 import { anotarJugadas } from "./anotarJugadas";
 import { hacerEnroque } from "./hacer";
-import { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esCapturaAlPasoValida } from "./esAlgo";
+import { esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaqueMate, esCapturaAlPasoValida } from "./esAlgo";
 let posicionCapturaAlPaso = "";
 let captureAlPaso = false;
 let secondChance = false;
@@ -57,7 +57,8 @@ export function capturarPieza(
         doyMate = esJaqueMate(jaque, copiaMap, setMate);
     }
     esAhogado(turno, copiaMap, setAhogado);
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate);
+    const coronacion = esCoronacion(posicion, piezaAMover);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate, coronacion);
     setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
@@ -135,7 +136,8 @@ export function moverPieza(
         doyMate = esJaqueMate(jaque, copiaMap, setMate);
     }
     esAhogado(turno, copiaMap, setAhogado);
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate);
+    const coronacion = esCoronacion(posicion, piezaAMover);
+    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate, coronacion);
     captureAlPaso = false;
     if (secondChance) {
         secondChance = false;
@@ -353,8 +355,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {

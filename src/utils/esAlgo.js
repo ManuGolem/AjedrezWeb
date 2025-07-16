@@ -1,4 +1,11 @@
 import { movsLegales } from "./utils";
+function esCoronacion(posicion, pieza) {
+    if (!(Number(posicion.split("")[1]) === 8 && pieza === "p") && !(Number(posicion.split("")[1]) === 1 && pieza === "P")) {
+        return false;
+    } else {
+        return posicion;
+    }
+}
 function esAhogado(turno, mapPosPiezas, setAhogado) {
     const piezas = [];
     if (!turno) {
@@ -113,4 +120,4 @@ function esCapturaAlPasoValida(peonACapturar, peonCaptura) {
     }
     return true;
 }
-export { esAhogado, esBlanco, esPosicionValida, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
+export { esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
