@@ -2,6 +2,10 @@
 
 A simplified single-player chess application inspired by chess.com, built with React and CSS to practice core game mechanics.
 
+# Link
+
+[AjedrezWeb](https://manugolem.github.io/AjedrezWeb/)
+
 ## Features
 
 - **Complete Chess Rules**:
