@@ -7,5 +7,5 @@ export default defineConfig(({ mode }) => ({
     build: {
         outDir: "docs",
     },
-    base: mode === "production" ? "Portfolio" : "/",
+    base: mode === "production" ? "AjedrezWeb" : "/",
 }));
