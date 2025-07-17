@@ -10,6 +10,7 @@ A simplified single-player chess application inspired by chess.com, built with R
     - Check detection
     - Turn management
     - Mate/Stalemate detection
+    - Coronation
 - **Move Notation**:
     - Algebraic notation logging
 - **Game State Management**:
@@ -27,7 +28,6 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
 
 ## Future Improvements
 
-- [ ] Coronation
 - [ ] Draw
     - [ ] Insufficient Material
     - [ ] Threefold Repetition
