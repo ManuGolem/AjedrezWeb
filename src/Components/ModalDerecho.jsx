@@ -17,7 +17,12 @@ export function ModalDerecho({ reiniciarTablero }) {
     function escribirMovimiento(mov) {
         const partes = mov.split("");
         const letra = esPeon(partes[0]);
-        const movimiento = letra ? partes.slice(1) : mov;
+        const movimiento = letra ? partes.slice(1).join("") : mov;
+        const coronacion = movimiento.split("=");
+        let piezaNueva;
+        if (coronacion.length > 1) {
+            piezaNueva = coronacion[1];
+        }
         return (
             <>
                 {letra ? (
@@ -26,7 +31,16 @@ export function ModalDerecho({ reiniciarTablero }) {
                         {movimiento}
                     </span>
                 ) : (
-                    <span className="movimiento">{movimiento}</span>
+                    <span className="movimiento">
+                        {coronacion[0]}
+                        {piezaNueva && (
+                            <>
+                                {" ="}
+                                <img src={data.piezas[piezaNueva[0]]} alt={letra} />
+                                {piezaNueva.slice(1)}
+                            </>
+                        )}
+                    </span>
                 )}
             </>
         );

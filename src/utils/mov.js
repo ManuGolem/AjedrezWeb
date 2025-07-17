@@ -35,6 +35,8 @@ export function capturarPieza(
     jaque,
     setAhogado,
     setMate,
+    setModal,
+    setLlamada,
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[cordenada];
@@ -49,20 +51,23 @@ export function capturarPieza(
     copiaMap[piezaSeleccionada] = "";
     copiaMap[cordenada] = piezaAMover;
     setJaque({});
-    //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
-    //Llamada para hacer toda la logica de la anotacion de las jugadas
-    let doyMate = false;
-    if (jaque.piezas) {
-        doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    const coronacion = esCoronacion(posicion, piezaAMover, setModal);
+    if (!coronacion) {
+        //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
+        const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
+        let doyMate = false;
+        if (dejoEnJaque) {
+            doyMate = esJaqueMate(jaque, copiaMap, setMate);
+        }
+        esAhogado(turno, copiaMap, setAhogado);
+        anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate, false);
+        setMapPiezas(copiaMap);
+        setTurno(!turno);
+    } else {
+        setLlamada({ posicion, piezaSeleccionada });
     }
-    esAhogado(turno, copiaMap, setAhogado);
-    const coronacion = esCoronacion(posicion, piezaAMover);
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate, coronacion);
-    setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
-    setTurno(!turno);
 }
 export function moverPieza(
     posicion,
@@ -82,6 +87,8 @@ export function moverPieza(
     jaque,
     setAhogado,
     setMate,
+    setModal,
+    setLlamada,
 ) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
@@ -129,25 +136,29 @@ export function moverPieza(
         copiaMap[posicion] = piezaAMover;
     }
     setJaque({});
-    //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-    const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
-    let doyMate = false;
-    if (dejoEnJaque) {
-        doyMate = esJaqueMate(jaque, copiaMap, setMate);
+    const coronacion = esCoronacion(posicion, piezaAMover, setModal);
+    if (!coronacion) {
+        //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
+        const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
+        let doyMate = false;
+        if (dejoEnJaque) {
+            doyMate = esJaqueMate(jaque, copiaMap, setMate);
+        }
+        esAhogado(turno, copiaMap, setAhogado);
+        anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate, false);
+        setMapPiezas(copiaMap);
+        setTurno(!turno);
+    } else {
+        setLlamada({ posicion, piezaSeleccionada });
     }
-    esAhogado(turno, copiaMap, setAhogado);
-    const coronacion = esCoronacion(posicion, piezaAMover);
-    anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate, coronacion);
     captureAlPaso = false;
     if (secondChance) {
         secondChance = false;
     } else {
         posicionCapturaAlPaso = "";
     }
-    setMapPiezas(copiaMap);
     setPosibles();
     setCapturas();
-    setTurno(!turno);
 }
 
 function movimientosTorre(letraCode, numero, mapPosPiezas, letra) {
@@ -355,8 +366,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {

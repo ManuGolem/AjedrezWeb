@@ -12,24 +12,26 @@ export function anotarJugadas(
     esMate,
     coronacion,
 ) {
-    if (coronacion) {
-        console.log(coronacion);
-    }
-    const pieza = mapPosPiezas[piezaSeleccionada];
+    let pieza = mapPosPiezas[piezaSeleccionada];
     let esCaptura = mapPosPiezas[posicion];
     captureAlPaso && (esCaptura = true);
     const jaque = dejoEnJaque ? "+" : "";
     const mate = esMate ? "+" : "";
+    let piezaAcoronar = "";
+    if (coronacion) {
+        pieza = esBlanco(coronacion) ? "p" : "P";
+        piezaAcoronar = "=" + coronacion;
+    }
     if (esCaptura) {
         const letra = piezaSeleccionada.split("")[0];
         if (esBlanco(pieza)) {
-            const nuevoMov = pieza !== "p" ? [pieza + "x" + posicion + jaque + mate] : [letra + "x" + posicion + jaque + mate];
+            const nuevoMov = pieza !== "p" ? [pieza + "x" + posicion + jaque + mate] : [letra + "x" + posicion + piezaAcoronar + jaque + mate];
             setMovimientos(nuevoMov);
             const jugadaNueva = jugadas;
             jugadaNueva.push(nuevoMov);
             setJugadas(jugadaNueva);
         } else {
-            posicion = (pieza !== "P" ? pieza + "x" + posicion : letra + "x" + posicion) + jaque + mate;
+            posicion = (pieza !== "P" ? pieza + "x" + posicion : letra + "x" + posicion + piezaAcoronar) + jaque + mate;
             const nuevoMov = movimientos;
             nuevoMov.push(posicion);
             setMovimientos(nuevoMov);
@@ -51,7 +53,7 @@ export function anotarJugadas(
                 jugadaNueva.push(nuevoMov);
                 setJugadas(jugadaNueva);
             } else {
-                const nuevoMov = pieza !== "p" ? [pieza + posicion + jaque + mate] : [posicion + jaque + mate];
+                const nuevoMov = pieza !== "p" ? [pieza + posicion + jaque + mate] : [posicion + piezaAcoronar + jaque + mate];
                 setMovimientos(nuevoMov);
                 const jugadaNueva = jugadas;
                 jugadaNueva.push(nuevoMov);

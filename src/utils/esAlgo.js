@@ -1,8 +1,11 @@
 import { movsLegales } from "./utils";
-function esCoronacion(posicion, pieza) {
+function esCoronacion(posicion, pieza, setModal) {
     if (!(Number(posicion.split("")[1]) === 8 && pieza === "p") && !(Number(posicion.split("")[1]) === 1 && pieza === "P")) {
         return false;
     } else {
+        setModal({
+            pieza: pieza === "p" ? "blanco" : "negro",
+        });
         return posicion;
     }
 }

@@ -1,8 +1,7 @@
 import data from "../dictionary.json";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useStartTablero } from "../Hooks/useStartTablero";
-import { esMiTurno, esJaqueMate } from "../utils/esAlgo";
-import { MostrarPiezas, MostrarPosiblesCapturas, MostrarPosiblesMovs } from "../utils/mostrar";
+import { MostrarPiezas, MostrarPosiblesCapturas, MostrarPiezasCoronacion, MostrarPosiblesMovs } from "../utils/mostrar";
 import { useGame } from "../context";
 export function Tablero() {
     const {
@@ -21,6 +20,7 @@ export function Tablero() {
         setTurno,
         setMate,
         setAhogado,
+        modal,
     } = useGame();
     const { tableroCords, piezas } = useStartTablero(start);
     useEffect(() => {
@@ -40,8 +40,23 @@ export function Tablero() {
         setMate();
         setAhogado();
     }, [tableroCords, piezas]);
+    const dialogRef = useRef(null);
+    useEffect(() => {
+        if (modal && !dialogRef.current?.open) {
+            dialogRef.current.showModal();
+        } else if (modal === false && dialogRef.current?.open) {
+            dialogRef.current.close();
+        }
+    }, [modal]);
     return (
         <article className="tablero">
+            {modal && (
+                <dialog ref={dialogRef} open className="modal">
+                    <div className="coronar">
+                        <MostrarPiezasCoronacion color={modal.pieza} />
+                    </div>
+                </dialog>
+            )}
             {tablero &&
                 tablero.map((fila, i) =>
                     fila.map((columna, j) => (

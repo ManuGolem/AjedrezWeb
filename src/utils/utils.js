@@ -38,15 +38,15 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
         setJaque &&
             (oponente === "K"
                 ? setJaque({
-                    piezas: "negras",
-                    lugar: posicion,
-                    rey: reyOponente,
-                })
+                      piezas: "negras",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  })
                 : setJaque({
-                    piezas: "blancas",
-                    lugar: posicion,
-                    rey: reyOponente,
-                }));
+                      piezas: "blancas",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  }));
         return true;
     }
     return false;
@@ -79,7 +79,6 @@ function hayJaque(mapPosPiezas, turno, setJaque) {
             }
         });
     }
-
     return hayProblema;
 }
 function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {

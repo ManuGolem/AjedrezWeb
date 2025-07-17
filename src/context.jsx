@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useStartTablero } from "./Hooks/useStartTablero";
 
 const GameContext = createContext();
 
@@ -17,10 +16,14 @@ export function GameProvider({ start, children }) {
     const [turno, setTurno] = useState(true);
     const [mate, setMate] = useState();
     const [ahogado, setAhogado] = useState();
+    const [modal, setModal] = useState();
+    const [llamada, setLlamada] = useState();
 
     return (
         <GameContext.Provider
             value={{
+                llamada,
+                setLlamada,
                 mapPosPiezas,
                 setMapPiezas,
                 tablero,
@@ -48,6 +51,8 @@ export function GameProvider({ start, children }) {
                 ahogado,
                 setAhogado,
                 start,
+                modal,
+                setModal,
             }}
         >
             {children}
