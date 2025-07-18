@@ -1,4 +1,5 @@
 import { movsLegales } from "./utils";
+import { posiblesJugadas } from "./mov";
 function esCoronacion(posicion, pieza, setModal) {
     if (!(Number(posicion.split("")[1]) === 8 && pieza === "p") && !(Number(posicion.split("")[1]) === 1 && pieza === "P")) {
         return false;
@@ -9,25 +10,40 @@ function esCoronacion(posicion, pieza, setModal) {
         return posicion;
     }
 }
+function esJaque(posicion, mapPiezas, turno, setJaque) {
+    //"K"-> oponente=Negras, "k"-> oponente=Blancas
+    const oponente = turno ? "K" : "k";
+    const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
+    const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
+    if (posiblesCapturas.includes(reyOponente)) {
+        setJaque &&
+            (oponente === "K"
+                ? setJaque({
+                      piezas: "negras",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  })
+                : setJaque({
+                      piezas: "blancas",
+                      lugar: posicion,
+                      rey: reyOponente,
+                  }));
+        return true;
+    }
+    return false;
+}
+
 function esAhogado(turno, mapPosPiezas, setAhogado) {
     const piezas = [];
-    if (!turno) {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (esBlanco(value)) {
-                    piezas.push(key);
-                }
+    Object.entries(mapPosPiezas).forEach(([key, value]) => {
+        if (value !== "") {
+            if (esBlanco(value) && !turno) {
+                piezas.push(key);
+            } else if (!esBlanco(value) && turno) {
+                piezas.push(key);
             }
-        });
-    } else {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (!esBlanco(value)) {
-                    piezas.push(key);
-                }
-            }
-        });
-    }
+        }
+    });
     const movimientos = [];
     piezas.forEach((cord) => {
         const mov = movsLegales("movs", false, cord, mapPosPiezas, false, false);
@@ -123,4 +139,4 @@ function esCapturaAlPasoValida(peonACapturar, peonCaptura) {
     }
     return true;
 }
-export { esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
+export { esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaque, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };

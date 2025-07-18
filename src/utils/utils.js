@@ -1,5 +1,5 @@
 import { posiblesJugadas } from "./mov";
-import { esBlanco } from "./esAlgo";
+import { esBlanco, esJaque } from "./esAlgo";
 function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
     if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
         const partesInicial = posInicial.split("");
@@ -26,28 +26,6 @@ function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) 
                 }
             }
         }
-    }
-    return false;
-}
-function esJaque(posicion, mapPiezas, turno, setJaque) {
-    //"K"-> oponente=Negras, "k"-> oponente=Blancas
-    const oponente = turno ? "K" : "k";
-    const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
-    const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
-    if (posiblesCapturas.includes(reyOponente)) {
-        setJaque &&
-            (oponente === "K"
-                ? setJaque({
-                      piezas: "negras",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  })
-                : setJaque({
-                      piezas: "blancas",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  }));
-        return true;
     }
     return false;
 }
