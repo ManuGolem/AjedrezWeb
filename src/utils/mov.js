@@ -40,7 +40,7 @@ export function capturarPieza(
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[cordenada];
-    const copiaPiezas = piezasCapturadas;
+    const copiaPiezas = { ...piezasCapturadas };
     const colorPieza = esBlanco(piezaACapturar) ? "negras" : "blancas";
     copiaPiezas[colorPieza].push(piezaACapturar);
     setPiezasCapturadas(copiaPiezas);
@@ -89,6 +89,8 @@ export function moverPieza(
     setMate,
     setModal,
     setLlamada,
+    setPiezasCapturadas,
+    piezasCapturadas,
 ) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
@@ -119,6 +121,12 @@ export function moverPieza(
                 copiaMap[posicionCapturaAlPaso] = "";
                 posicionCapturaAlPaso = "";
                 captureAlPaso = true;
+                //Setear la captura
+                const copiaPiezas = { ...piezasCapturadas };
+                const piezaComida = piezaAMover === "p" ? "P" : "p";
+                const colorPieza = esBlanco(piezaAMover) ? "blancas" : "negras";
+                copiaPiezas[colorPieza].push(piezaComida);
+                setPiezasCapturadas(copiaPiezas);
             }
             if (Math.abs(posicion.split("")[1] - piezaSeleccionada.split("")[1]) > 1) {
                 const posiblePeon1 = String.fromCharCode(posicion.split("")[0].charCodeAt(0) + 1) + posicion.split("")[1];
