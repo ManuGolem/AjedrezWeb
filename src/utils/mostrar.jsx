@@ -5,6 +5,7 @@ import { hayJaque } from "./utils";
 import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { anotarJugadas } from "./anotarJugadas";
+import { PiezasCapturadas } from "../Components/PiezasCapturadas";
 function MostrarPiezas({ columna }) {
     const { mapPosPiezas, setPosibles, setCapturas, primerMRN, primerMRB, jaque, turno } = useGame();
     return mapPosPiezas[columna] ? (
@@ -80,6 +81,8 @@ function MostrarPosiblesMovs({ columna }) {
         setMate,
         setModal,
         setLlamada,
+        setPiezasCapturadas,
+        piezasCapturadas,
     } = useGame();
     return posibles
         ? posibles.map(
@@ -109,6 +112,8 @@ function MostrarPosiblesMovs({ columna }) {
                                   setMate,
                                   setModal,
                                   setLlamada,
+                                  setPiezasCapturadas,
+                                  piezasCapturadas,
                               )
                           }
                       >
