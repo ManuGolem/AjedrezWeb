@@ -37,7 +37,6 @@ export function PiezasCapturadas({ color }) {
             puntosNuevos.blancos = 0;
         }
         setPuntos(puntosNuevos);
-        console.log(piezasCapturadas);
     }, [piezasCapturadas]);
     return (
         <div className="piezasCapturadas">

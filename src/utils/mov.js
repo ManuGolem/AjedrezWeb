@@ -153,7 +153,7 @@ export function moverPieza(
             doyMate = esJaqueMate(jaque, copiaMap, setMate);
         }
         esAhogado(turno, copiaMap, setAhogado);
-        anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, false, doyMate, false);
+        anotarJugadas(mapPosPiezas, posicion, jugadas, setJugadas, movimientos, setMovimientos, piezaSeleccionada, dejoEnJaque, captureAlPaso, doyMate, false);
         setMapPiezas(copiaMap);
         setTurno(!turno);
     } else {
