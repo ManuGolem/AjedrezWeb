@@ -139,4 +139,34 @@ function esCapturaAlPasoValida(peonACapturar, peonCaptura) {
     }
     return true;
 }
-export { esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaque, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
+function esEnroqueValido(pieza, primerMRB, primerMRN, posiblesTapadas) {
+    if (pieza === "k" && primerMRB) {
+        // Enroque blanco corto (g1)
+        if (posiblesTapadas.includes("g1")) {
+            if (!posiblesTapadas.includes("f1")) {
+                posiblesTapadas = posiblesTapadas.filter((x) => x !== "g1");
+            }
+        }
+        // Enroque blanco largo (c1)
+        if (posiblesTapadas.includes("c1")) {
+            if (!posiblesTapadas.includes("d1")) {
+                posiblesTapadas = posiblesTapadas.filter((x) => x !== "c1");
+            }
+        }
+    } else if (pieza === "K" && primerMRN) {
+        // Enroque negro corto (g8)
+        if (posiblesTapadas.includes("g8")) {
+            if (!posiblesTapadas.includes("f8")) {
+                posiblesTapadas = posiblesTapadas.filter((x) => x !== "g8");
+            }
+        }
+        // Enroque negro largo (c8)
+        if (posiblesTapadas.includes("c8")) {
+            if (!posiblesTapadas.includes("d8")) {
+                posiblesTapadas = posiblesTapadas.filter((x) => x !== "c8");
+            }
+        }
+    }
+    return posiblesTapadas;
+}
+export { esEnroqueValido, esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaque, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };

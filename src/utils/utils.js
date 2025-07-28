@@ -1,5 +1,5 @@
 import { posiblesJugadas } from "./mov";
-import { esBlanco, esJaque } from "./esAlgo";
+import { esBlanco, esJaque, esEnroqueValido } from "./esAlgo";
 function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
     if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
         const partesInicial = posInicial.split("");
@@ -79,33 +79,8 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
             copiaMap[jugada] = pieza;
             const hayProblema = hayJaque(copiaMap, turno, false);
             !hayProblema && posiblesTapadas.push(jugada);
-            if (pieza === "k" && primerMRB) {
-                // Enroque blanco corto (g1)
-                if (posiblesTapadas.includes("g1")) {
-                    if (!posiblesTapadas.includes("f1")) {
-                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "g1");
-                    }
-                }
-                // Enroque blanco largo (c1)
-                if (posiblesTapadas.includes("c1")) {
-                    if (!posiblesTapadas.includes("d1")) {
-                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "c1");
-                    }
-                }
-            } else if (pieza === "K" && primerMRN) {
-                // Enroque negro corto (g8)
-                if (posiblesTapadas.includes("g8")) {
-                    if (!posiblesTapadas.includes("f8")) {
-                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "g8");
-                    }
-                }
-                // Enroque negro largo (c8)
-                if (posiblesTapadas.includes("c8")) {
-                    if (!posiblesTapadas.includes("d8")) {
-                        posiblesTapadas = posiblesTapadas.filter((x) => x !== "c8");
-                    }
-                }
-            }
+            // Aca manejo el caso donde la posicion de enroque no esta siendo atacado, pero el camino hacia esa posicion, si esta siendo atacado
+            posiblesTapadas = esEnroqueValido(pieza, primerMRB, primerMRN, posiblesTapadas);
         });
     } else {
         const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
