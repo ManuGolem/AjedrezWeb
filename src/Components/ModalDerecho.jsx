@@ -53,7 +53,7 @@ export function ModalDerecho({ reiniciarTablero }) {
             <div className="notacion">
                 {jugadas &&
                     jugadas.map((jugada, index) => (
-                        <p key={index} className="jugada">
+                        <p key={index} className={`jugada ${index % 2 === 0 ? "jugada2" : "jugada1"}`}>
                             {index + 1}.{jugada.map((mov) => escribirMovimiento(mov))}
                         </p>
                     ))}

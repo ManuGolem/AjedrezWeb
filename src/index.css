@@ -42,8 +42,16 @@ main {
 .jugada {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-
+    padding: 4px;
     justify-content: center;
+}
+
+.jugada1 {
+    background-color: hsla(0, 0%, 100%, 0.02);
+}
+
+.jugada2 {
+    background-color: #262522;
 }
 
 .movimiento {
