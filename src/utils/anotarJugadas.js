@@ -1,17 +1,9 @@
 import { esBlanco } from "./esAlgo";
-export function anotarJugadas(
-    mapPosPiezas,
-    posicion,
-    jugadas,
-    setJugadas,
-    movimientos,
-    setMovimientos,
-    piezaSeleccionada,
-    dejoEnJaque,
-    captureAlPaso,
-    esMate,
-    coronacion,
-) {
+export function anotarJugadas(parametros) {
+    let { mapPosPiezas, posicion, piezaSeleccionada, captureAlPaso } = parametros;
+    let { movimientos, setMovimientos } = parametros;
+    let { jugadas, setJugadas } = parametros;
+    let { dejoEnJaque, esMate, coronacion } = parametros;
     let pieza = mapPosPiezas[piezaSeleccionada];
     let esCaptura = mapPosPiezas[posicion];
     captureAlPaso && (esCaptura = true);
