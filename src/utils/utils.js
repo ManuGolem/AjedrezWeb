@@ -42,21 +42,12 @@ function hayJaque(mapPosPiezas, turno, setJaque) {
         }
     });
     let hayProblema = false;
-    if (!turno) {
-        //Posible jaque a blancas
-        piezasNegras.forEach((cord) => {
-            if (esJaque(cord, mapPosPiezas, turno, setJaque) && !hayProblema) {
-                hayProblema = true;
-            }
-        });
-    } else {
-        //Posible jaque a Negras
-        piezasBlancas.forEach((cord) => {
-            if (esJaque(cord, mapPosPiezas, turno, setJaque) && !hayProblema) {
-                hayProblema = true;
-            }
-        });
-    }
+    const piezas = turno ? piezasBlancas : piezasNegras;
+    piezas.forEach((cord) => {
+        if (esJaque(cord, mapPosPiezas, turno, setJaque) && !hayProblema) {
+            hayProblema = true;
+        }
+    });
     return hayProblema;
 }
 function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
@@ -69,30 +60,21 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
         turno = esBlanco(mapPosPiezas[cords]) ? false : true;
     }
     let posiblesTapadas = [];
-
-    if (accion === "movs") {
-        const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
-        //Jugadas para tapar
-        posiblesJugadasPieza.forEach((jugada) => {
-            const copiaMap = { ...mapPosPiezas };
-            copiaMap[cords] = "";
+    const posiblesJugadasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
+    posiblesJugadasPieza.forEach((jugada) => {
+        const copiaMap = { ...mapPosPiezas };
+        copiaMap[cords] = "";
+        if (accion === "movs") {
             copiaMap[jugada] = pieza;
-            const hayProblema = hayJaque(copiaMap, turno, false);
-            !hayProblema && posiblesTapadas.push(jugada);
-            // Aca manejo el caso donde la posicion de enroque no esta siendo atacado, pero el camino hacia esa posicion, si esta siendo atacado
-            posiblesTapadas = esEnroqueValido(pieza, primerMRB, primerMRN, posiblesTapadas);
-        });
-    } else {
-        const posiblesCapturasPieza = posiblesJugadas(accion, cords, mapPosPiezas, primerMRB, primerMRN);
-        posiblesCapturasPieza.forEach((captura) => {
-            const copiaMap = { ...mapPosPiezas };
-            copiaMap[cords] = "";
-            copiaMap[captura] = mapPosPiezas[cords];
-            const hayProblema = hayJaque(copiaMap, turno, false);
-
-            !hayProblema && posiblesTapadas.push(captura);
-        });
-    }
+        } else {
+            copiaMap[jugada] = mapPosPiezas[cords];
+        }
+        const hayProblema = hayJaque(copiaMap, turno, false);
+        !hayProblema && posiblesTapadas.push(jugada);
+        // Aca manejo el caso donde la posicion de enroque no esta siendo atacado, pero el camino hacia esa posicion, si esta siendo atacado
+        // Si estamos en ese caso, elimino todas estas posibles jugadas pero mantengo las otras (por eso la asignacion y no push)
+        posiblesTapadas = esEnroqueValido(pieza, primerMRB, primerMRN, posiblesTapadas);
+    });
     return posiblesTapadas;
 }
 export { hayPiezasEntreMedio, movsLegales, hayJaque };
