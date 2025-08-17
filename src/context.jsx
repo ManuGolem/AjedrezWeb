@@ -18,6 +18,7 @@ export function GameProvider({ start, children }) {
     const [ahogado, setAhogado] = useState();
     const [modal, setModal] = useState();
     const [llamada, setLlamada] = useState();
+    const [historial, setHistorial] = useState([{}]);
 
     return (
         <GameContext.Provider
@@ -53,6 +54,8 @@ export function GameProvider({ start, children }) {
                 start,
                 modal,
                 setModal,
+                setHistorial,
+                historial,
             }}
         >
             {children}
