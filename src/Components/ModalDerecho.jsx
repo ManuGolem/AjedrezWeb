@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import data from "../dictionary.json";
 import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
+import { irAJugada } from "../utils/utils";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const { jugadas, mate, ahogado, jaque } = useGame();
+    const { jugadas, mate, ahogado, jaque, historial } = useGame();
     useEffect(() => {
         if (mate) {
             setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
@@ -17,7 +18,7 @@ export function ModalDerecho({ reiniciarTablero }) {
     function escribirMovimiento(mov) {
         const partes = mov.split("");
         const letra = esPeon(partes[0]);
-        const movimiento = letra ? partes.slice(1).join("") : mov;
+        const movimiento = letra !== true ? partes.slice(1).join("") : mov;
         const coronacion = movimiento.split("=");
         let piezaNueva;
         if (coronacion.length > 1) {
@@ -25,13 +26,13 @@ export function ModalDerecho({ reiniciarTablero }) {
         }
         return (
             <>
-                {letra ? (
-                    <span className="movimiento">
+                {letra !== true ? (
+                    <span className="movimiento" onClick={() => irAJugada(mov, historial)}>
                         <img src={data.piezas[letra]} alt={letra} />
                         {movimiento}
                     </span>
                 ) : (
-                    <span className="movimiento">
+                    <span className="movimiento" onClick={() => irAJugada(mov, historial)}>
                         {coronacion[0]}
                         {piezaNueva && (
                             <>
