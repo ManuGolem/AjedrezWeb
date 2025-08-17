@@ -32,6 +32,7 @@ function MostrarPiezasCoronacion({ color }) {
         movimientos,
         setMovimientos,
         jugadas,
+        setHistorial,
     } = useGame();
     const { posicion, piezaSeleccionada } = llamada;
     function llamarAnotar(pieza) {
@@ -58,8 +59,9 @@ function MostrarPiezasCoronacion({ color }) {
             coronacion: pieza,
             captureAlPaso: false,
         };
-        anotarJugadas(parametrosLlamada);
+        const mov = anotarJugadas(parametrosLlamada);
         setMapPiezas(copiaMap);
+        setHistorial((prev) => ({ ...prev, [mov]: mapPosPiezas }));
         setTurno(!turno);
     }
     const [piezas, setPiezas] = useState();
@@ -95,44 +97,46 @@ function MostrarPosiblesMovs({ columna }) {
         setLlamada,
         setPiezasCapturadas,
         piezasCapturadas,
+        setHistorial,
     } = useGame();
     return posibles
         ? posibles.map(
-            (pos) =>
-                pos === columna && (
-                    <span
-                        key={columna}
-                        className="posible"
-                        onClick={() =>
-                            moverPieza(
-                                columna,
-                                mapPosPiezas,
-                                setMapPiezas,
-                                setPosibles,
-                                setCapturas,
-                                turno,
-                                setTurno,
-                                setMRB,
-                                setMRN,
-                                movimientos,
-                                setMovimientos,
-                                jugadas,
-                                setJugadas,
-                                setJaque,
-                                jaque,
-                                setAhogado,
-                                setMate,
-                                setModal,
-                                setLlamada,
-                                setPiezasCapturadas,
-                                piezasCapturadas,
-                            )
-                        }
-                    >
-                        <span key={columna * 2} className="circulo"></span>
-                    </span>
-                ),
-        )
+              (pos) =>
+                  pos === columna && (
+                      <span
+                          key={columna}
+                          className="posible"
+                          onClick={() =>
+                              moverPieza(
+                                  columna,
+                                  mapPosPiezas,
+                                  setMapPiezas,
+                                  setPosibles,
+                                  setCapturas,
+                                  turno,
+                                  setTurno,
+                                  setMRB,
+                                  setMRN,
+                                  movimientos,
+                                  setMovimientos,
+                                  jugadas,
+                                  setJugadas,
+                                  setJaque,
+                                  jaque,
+                                  setAhogado,
+                                  setMate,
+                                  setModal,
+                                  setLlamada,
+                                  setPiezasCapturadas,
+                                  piezasCapturadas,
+                                  setHistorial,
+                              )
+                          }
+                      >
+                          <span key={columna * 2} className="circulo"></span>
+                      </span>
+                  ),
+          )
         : null;
 }
 
@@ -157,40 +161,42 @@ function MostrarPosiblesCapturas({ columna }) {
         setModal,
         setMate,
         setLlamada,
+        setHistorial,
     } = useGame();
     return capturas
         ? capturas.map(
-            (pos) =>
-                pos == columna && (
-                    <span
-                        key={columna}
-                        className="captura"
-                        onClick={() =>
-                            capturarPieza(
-                                columna,
-                                mapPosPiezas,
-                                setMapPiezas,
-                                setPosibles,
-                                setCapturas,
-                                turno,
-                                setTurno,
-                                piezasCapturadas,
-                                setPiezasCapturadas,
-                                jugadas,
-                                setJugadas,
-                                movimientos,
-                                setMovimientos,
-                                setJaque,
-                                jaque,
-                                setAhogado,
-                                setMate,
-                                setModal,
-                                setLlamada,
-                            )
-                        }
-                    ></span>
-                ),
-        )
+              (pos) =>
+                  pos == columna && (
+                      <span
+                          key={columna}
+                          className="captura"
+                          onClick={() =>
+                              capturarPieza(
+                                  columna,
+                                  mapPosPiezas,
+                                  setMapPiezas,
+                                  setPosibles,
+                                  setCapturas,
+                                  turno,
+                                  setTurno,
+                                  piezasCapturadas,
+                                  setPiezasCapturadas,
+                                  jugadas,
+                                  setJugadas,
+                                  movimientos,
+                                  setMovimientos,
+                                  setJaque,
+                                  jaque,
+                                  setAhogado,
+                                  setMate,
+                                  setModal,
+                                  setLlamada,
+                                  setHistorial,
+                              )
+                          }
+                      ></span>
+                  ),
+          )
         : null;
 }
 export { MostrarPiezas, MostrarPosiblesMovs, MostrarPiezasCoronacion, MostrarPosiblesCapturas };
