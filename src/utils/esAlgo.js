@@ -66,10 +66,9 @@ function esAhogado(turno, mapPosPiezas, setAhogado) {
 function esPeon(pieza) {
     const piezaCode = pieza.charCodeAt(0);
     if ((piezaCode <= "h".charCodeAt(0) && piezaCode >= "a".charCodeAt(0)) || pieza == "O") {
-        return false;
-    } else {
-        return pieza;
+        return true;
     }
+    return pieza;
 }
 function esJaqueMate(jaque, mapPosPiezas, setMate) {
     const turno = jaque.piezas === "blancas";
