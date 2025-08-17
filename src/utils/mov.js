@@ -37,6 +37,7 @@ export function capturarPieza(
     setMate,
     setModal,
     setLlamada,
+    setHistorial,
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[cordenada];
@@ -72,9 +73,11 @@ export function capturarPieza(
             captureAlPaso: false,
             esMate: doyMate,
             coronacion: false,
+            setHistorial,
         };
-        anotarJugadas(parametrosLlamada);
+        const mov = anotarJugadas(parametrosLlamada);
         setMapPiezas(copiaMap);
+        setHistorial((prev) => ({ ...prev, [mov]: copiaMap }));
         setTurno(!turno);
     } else {
         setLlamada({ posicion, piezaSeleccionada });
@@ -104,6 +107,7 @@ export function moverPieza(
     setLlamada,
     setPiezasCapturadas,
     piezasCapturadas,
+    setHistorial,
 ) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
@@ -179,8 +183,9 @@ export function moverPieza(
             esMate: doyMate,
             coronacion: false,
         };
-        anotarJugadas(parametrosLlamada);
+        const mov = anotarJugadas(parametrosLlamada);
         setMapPiezas(copiaMap);
+        setHistorial((prev) => ({ ...prev, [mov]: copiaMap }));
         setTurno(!turno);
     } else {
         setLlamada({ posicion, piezaSeleccionada });
@@ -400,8 +405,8 @@ export function posiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN)
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
