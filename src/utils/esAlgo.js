@@ -1,5 +1,5 @@
-import { movsLegales } from "./utils";
-import { posiblesJugadas } from "./mov";
+// Funciones que devuelven true or false como objetivo principal
+import { movsLegales } from "./mov";
 function esCoronacion(posicion, pieza, setModal) {
     if (!(Number(posicion.split("")[1]) === 8 && pieza === "p") && !(Number(posicion.split("")[1]) === 1 && pieza === "P")) {
         return false;
@@ -10,29 +10,6 @@ function esCoronacion(posicion, pieza, setModal) {
         return posicion;
     }
 }
-function esJaque(posicion, mapPiezas, turno, setJaque) {
-    //"K"-> oponente=Negras, "k"-> oponente=Blancas
-    const oponente = turno ? "K" : "k";
-    const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
-    const posiblesCapturas = posiblesJugadas("captura", posicion, mapPiezas);
-    if (posiblesCapturas.includes(reyOponente)) {
-        setJaque &&
-            (oponente === "K"
-                ? setJaque({
-                      piezas: "negras",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  })
-                : setJaque({
-                      piezas: "blancas",
-                      lugar: posicion,
-                      rey: reyOponente,
-                  }));
-        return true;
-    }
-    return false;
-}
-
 function esAhogado(turno, mapPosPiezas, setAhogado) {
     const piezas = [];
     Object.entries(mapPosPiezas).forEach(([key, value]) => {
@@ -58,9 +35,8 @@ function esAhogado(turno, mapPosPiezas, setAhogado) {
     if (movimientos.length === 0) {
         setAhogado(true);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 function esPeon(pieza) {
@@ -69,44 +45,6 @@ function esPeon(pieza) {
         return true;
     }
     return pieza;
-}
-function esJaqueMate(jaque, mapPosPiezas, setMate) {
-    const turno = jaque.piezas === "blancas";
-    const piezas = [];
-    if (turno) {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (esBlanco(value)) {
-                    piezas.push(key);
-                }
-            }
-        });
-    } else {
-        Object.entries(mapPosPiezas).forEach(([key, value]) => {
-            if (value !== "") {
-                if (!esBlanco(value)) {
-                    piezas.push(key);
-                }
-            }
-        });
-    }
-    const movimientos = [];
-    piezas.forEach((cord) => {
-        const mov = movsLegales("movs", jaque, cord, mapPosPiezas, false, false);
-        if (mov.length !== 0) {
-            movimientos.push(mov);
-        }
-        const captura = movsLegales("captura", jaque, cord, mapPosPiezas, false, false);
-        if (captura.length !== 0) {
-            movimientos.push(captura);
-        }
-    });
-    if (movimientos.length === 0) {
-        setMate(true);
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function esBlanco(pieza) {
@@ -117,8 +55,7 @@ function esBlanco(pieza) {
     return false;
 }
 function esMiTurno(turno, pos, mapPosPiezas) {
-    const devolver = turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
-    return devolver;
+    return turno ? esBlanco(mapPosPiezas[pos]) : !esBlanco(mapPosPiezas[pos]);
 }
 function esPosicionValida(letra, numero) {
     return numero >= 1 && numero <= 8 && letra >= "a" && letra <= "h";
@@ -168,4 +105,34 @@ function esEnroqueValido(pieza, primerMRB, primerMRN, posiblesTapadas) {
     }
     return posiblesTapadas;
 }
-export { esEnroqueValido, esAhogado, esBlanco, esCoronacion, esPosicionValida, esJaque, esJaqueMate, esPeon, esMiTurno, esCapturaAlPasoValida };
+
+function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) {
+    if (piezaPorMover.toUpperCase() === "K" || piezaPorMover.toUpperCase() == "R") {
+        const partesInicial = posInicial.split("");
+        const partesFinal = posFinal.split("");
+        const letraDePosInicial = partesInicial[0].charCodeAt(0);
+        const numeroDePosInicial = partesInicial[1];
+        const letraDePosFinal = partesFinal[0].charCodeAt(0);
+        const numeroDePosFinal = partesFinal[1];
+        if (numeroDePosInicial === numeroDePosFinal) {
+            //Caso enroque del rey
+            const numero = numeroDePosInicial;
+
+            if (letraDePosInicial < letraDePosFinal) {
+                for (let i = letraDePosInicial + 1; i < letraDePosFinal; i++) {
+                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
+                        return true;
+                    }
+                }
+            } else {
+                for (let i = letraDePosInicial - 1; i > letraDePosFinal; i--) {
+                    if (mapPosPiezas[String.fromCharCode(i) + numero]) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+export { hayPiezasEntreMedio, esEnroqueValido, esAhogado, esBlanco, esCoronacion, esPosicionValida, esPeon, esMiTurno, esCapturaAlPasoValida };
