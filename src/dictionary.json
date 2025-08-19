@@ -1,18 +1,4 @@
 {
-    "piezasv2": {
-        "r": "./icons/rookWhite.svg",
-        "n": "./icons/knightWhite.svg",
-        "x": "./icons/bishopWhite.svg",
-        "q": "./icons/queenWhite.svg",
-        "k": "./icons/kingWhite.svg",
-        "p": "./icons/pawnWhite.svg",
-        "R": "./icons/rook.svg",
-        "C": "./icons/knight.svg",
-        "X": "./icons/bishop.svg",
-        "Q": "./icons/queen.svg",
-        "K": "./icons/king.svg",
-        "P": "./icons/pawn.svg"
-    },
     "posicionInicial": {
         "a1": "r",
         "b1": "n",
@@ -48,18 +34,18 @@
         "h8": "R"
     },
     "piezas": {
-        "r": "./prueba/rookWhite.png",
-        "n": "./prueba/knightWhite.png",
-        "x": "./prueba/bishopWhite.png",
-        "q": "./prueba/queenWhite.png",
-        "k": "./prueba/kingWhite.png",
-        "p": "./prueba/pawnWhite.png",
-        "R": "./prueba/rook.png",
-        "C": "./prueba/knight.png",
-        "X": "./prueba/bishop.png",
-        "Q": "./prueba/queen.png",
-        "K": "./prueba/king.png",
-        "P": "./prueba/pawn.png"
+        "r": "./piezas/rookWhite.png",
+        "n": "./piezas/knightWhite.png",
+        "x": "./piezas/bishopWhite.png",
+        "q": "./piezas/queenWhite.png",
+        "k": "./piezas/kingWhite.png",
+        "p": "./piezas/pawnWhite.png",
+        "R": "./piezas/rook.png",
+        "C": "./piezas/knight.png",
+        "X": "./piezas/bishop.png",
+        "Q": "./piezas/queen.png",
+        "K": "./piezas/king.png",
+        "P": "./piezas/pawn.png"
     },
     "tablero": {
         "a1": "black",
