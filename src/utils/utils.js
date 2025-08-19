@@ -29,9 +29,6 @@ function hayPiezasEntreMedio(posInicial, posFinal, mapPosPiezas, piezaPorMover) 
     }
     return false;
 }
-function irAJugada(mov, historial) {
-    console.log(mov, historial[mov]);
-}
 function hayJaque(mapPosPiezas, turno, setJaque) {
     const piezasBlancas = [];
     const piezasNegras = [];
@@ -80,4 +77,4 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
     });
     return posiblesTapadas;
 }
-export { hayPiezasEntreMedio, movsLegales, hayJaque, irAJugada };
+export { hayPiezasEntreMedio, movsLegales, hayJaque };

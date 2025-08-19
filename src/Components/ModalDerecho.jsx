@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import data from "../dictionary.json";
 import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
-import { irAJugada } from "../utils/utils";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const { jugadas, mate, ahogado, jaque, historial } = useGame();
+    const { jugadas, mate, ahogado, jaque, historial, setMapPiezas } = useGame();
     useEffect(() => {
         if (mate) {
             setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
@@ -15,6 +14,9 @@ export function ModalDerecho({ reiniciarTablero }) {
             setResultado(false);
         }
     }, [mate, ahogado]);
+    function irAJugada(mov, historial) {
+        setMapPiezas(historial[mov]);
+    }
     function escribirMovimiento(mov) {
         const partes = mov.split("");
         const letra = esPeon(partes[0]);
