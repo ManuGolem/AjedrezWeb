@@ -39,8 +39,6 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
     - [ ] Draw by Agreement
 - [ ] Move history tracking
 - [ ] Game status indicators
-- [ ] Move history tracking
-- [ ] Game status indicators
 - [ ] Save game state locally
 - [ ] PGN game import/export
 - [ ] Sound
