@@ -264,6 +264,7 @@ main {
     .tablero {
         grid-template-columns: repeat(8, 40px);
         grid-template-rows: repeat(8, 40px);
+        margin-left: -10px;
     }
 
     .tableroCordsNums {
@@ -283,7 +284,9 @@ main {
     }
 
     main {
-        grid-template-columns: 5px auto;
+        grid-template-columns: 20px auto;
+        gap: 0;
+        margin-left: -20px;
     }
 
     .circulo {
