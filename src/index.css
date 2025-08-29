@@ -259,3 +259,34 @@ main {
         width: 60px;
     }
 }
+
+@media (max-width: 500px) {
+    .tablero {
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+    }
+
+    .tableroCordsNums {
+        p {
+            height: 40px;
+        }
+    }
+
+    .tableroCordsLetras {
+        p {
+            width: 40px;
+        }
+    }
+
+    .botonesNuevaPartida {
+        grid-column: 1/-1;
+    }
+
+    main {
+        grid-template-columns: 5px auto;
+    }
+
+    .circulo {
+        padding: 7px;
+    }
+}
