@@ -15,7 +15,7 @@ export function ModalDerecho({ reiniciarTablero }) {
         }
     }, [mate, ahogado]);
     function irAJugada(mov, historial) {
-        setMapPiezas(historial[mov]);
+        // setMapPiezas(historial[mov]);
     }
     function escribirMovimiento(mov) {
         const partes = mov.split("");
