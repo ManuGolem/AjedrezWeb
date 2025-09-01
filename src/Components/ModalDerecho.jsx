@@ -4,7 +4,7 @@ import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const { jugadas, mate, ahogado, jaque, historial, setMapPiezas } = useGame();
+    const { jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
     useEffect(() => {
         if (mate) {
             setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
@@ -15,7 +15,17 @@ export function ModalDerecho({ reiniciarTablero }) {
         }
     }, [mate, ahogado]);
     function irAJugada(mov, historial) {
-        // setMapPiezas(historial[mov]);
+        setMapPiezas(historial[mov]);
+        const keys = Object.keys(historial);
+        const ultimoMov = keys[keys.length - 1];
+        setMirandoHistorial(mov !== ultimoMov);
+        if (mov !== ultimoMov) {
+            setMirandoHistorial(true);
+            setPosibles();
+            setCapturas();
+        } else {
+            setMirandoHistorial(false);
+        }
     }
     function escribirMovimiento(mov) {
         const partes = mov.split("");

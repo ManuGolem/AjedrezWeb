@@ -21,6 +21,7 @@ export function Tablero() {
         setMate,
         setAhogado,
         modal,
+        setMirandoHistorial,
     } = useGame();
     const { tableroCords, piezas } = useStartTablero(start);
     useEffect(() => {
@@ -39,6 +40,7 @@ export function Tablero() {
         setTurno(true);
         setMate();
         setAhogado();
+        setMirandoHistorial(false);
     }, [tableroCords, piezas]);
     const dialogRef = useRef(null);
     useEffect(() => {

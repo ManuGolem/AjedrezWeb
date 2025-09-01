@@ -6,10 +6,14 @@ import data from "../dictionary.json";
 import { useEffect, useState } from "react";
 import { anotarJugadas } from "./anotarJugadas";
 function MostrarPiezas({ columna }) {
-    const { mapPosPiezas, setPosibles, setCapturas, primerMRN, primerMRB, jaque, turno } = useGame();
+    const { mapPosPiezas, setPosibles, setCapturas, primerMRN, primerMRB, jaque, turno, mirandoHistorial } = useGame();
     return mapPosPiezas[columna] ? (
         <img
-            onClick={() => esMiTurno(turno, columna, mapPosPiezas) && mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN, jaque)}
+            onClick={() =>
+                !mirandoHistorial &&
+                esMiTurno(turno, columna, mapPosPiezas) &&
+                mostrarPath(columna, mapPosPiezas, setPosibles, setCapturas, primerMRB, primerMRN, jaque)
+            }
             className="pieza"
             src={data.piezas[mapPosPiezas[columna]]}
             alt={columna}
