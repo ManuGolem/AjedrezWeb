@@ -18,7 +18,7 @@ export function GameProvider({ start, children }) {
     const [ahogado, setAhogado] = useState();
     const [modal, setModal] = useState();
     const [llamada, setLlamada] = useState();
-    const [historial, setHistorial] = useState([{}]);
+    const [historial, setHistorial] = useState([]);
     const [mirandoHistorial, setMirandoHistorial] = useState(false);
 
     return (

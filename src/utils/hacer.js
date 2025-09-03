@@ -93,8 +93,8 @@ function buscarPosiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN) 
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -156,6 +156,7 @@ function moverPieza(
     setPiezasCapturadas,
     piezasCapturadas,
     setHistorial,
+    historial,
 ) {
     const piezaAMover = mapPosPiezas[piezaSeleccionada];
     const copiaMap = { ...mapPosPiezas };
@@ -231,9 +232,14 @@ function moverPieza(
             esMate: doyMate,
             coronacion: false,
         };
-        const mov = anotarJugadas(parametrosLlamada);
+        anotarJugadas(parametrosLlamada);
+        const largo = historial.length;
+        if (largo == 0) {
+            setHistorial([copiaMap]);
+        } else {
+            setHistorial([...historial, copiaMap]);
+        }
         setMapPiezas(copiaMap);
-        setHistorial((prev) => ({ ...prev, [mov]: copiaMap }));
         setTurno(!turno);
     } else {
         setLlamada({ posicion, piezaSeleccionada });
@@ -269,6 +275,7 @@ function capturarPieza(
     setModal,
     setLlamada,
     setHistorial,
+    historial,
 ) {
     //Parte para guardar las piezas que se van capturando
     const piezaACapturar = mapPosPiezas[cordenada];
@@ -306,9 +313,14 @@ function capturarPieza(
             coronacion: false,
             setHistorial,
         };
-        const mov = anotarJugadas(parametrosLlamada);
+        anotarJugadas(parametrosLlamada);
+        const largo = historial.length;
+        if (largo == 0) {
+            setHistorial([copiaMap]);
+        } else {
+            setHistorial([...historial, copiaMap]);
+        }
         setMapPiezas(copiaMap);
-        setHistorial((prev) => ({ ...prev, [mov]: copiaMap }));
         setTurno(!turno);
     } else {
         setLlamada({ posicion, piezaSeleccionada });

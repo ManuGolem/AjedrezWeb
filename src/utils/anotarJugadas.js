@@ -72,10 +72,4 @@ export function anotarJugadas(parametros) {
             }
         }
     }
-    if (nuevoMov.length > 1) {
-        nuevoMov = nuevoMov[1];
-    } else {
-        nuevoMov = nuevoMov[0];
-    }
-    return nuevoMov;
 }

@@ -4,6 +4,8 @@ import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
+    const [movActual, setMovActual] = useState(-1);
+    const [prueba, setPrueba] = useState(-1);
     const { jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
     useEffect(() => {
         if (mate) {
@@ -14,11 +16,35 @@ export function ModalDerecho({ reiniciarTablero }) {
             setResultado(false);
         }
     }, [mate, ahogado]);
-    function irAJugada(mov, historial) {
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "ArrowLeft") {
+                jugadaAnterior();
+            } else if (event.key === "ArrowRight") {
+                jugadaSiguiente();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [movActual, historial.length]);
+    useEffect(() => {
+        setMovActual(movActual + 1);
+    }, [historial]);
+    function irAJugada(mov) {
+        const ultimoMov = historial.length - 1;
+        if (mov > ultimoMov || mov < -1) {
+            return;
+        } else if (mov === -1) {
+            setMovActual(mov);
+            setMapPiezas(data.posicionInicial);
+            return;
+        }
         setMapPiezas(historial[mov]);
-        const keys = Object.keys(historial);
-        const ultimoMov = keys[keys.length - 1];
         setMirandoHistorial(mov !== ultimoMov);
+        setMovActual(mov);
         if (mov !== ultimoMov) {
             setMirandoHistorial(true);
             setPosibles();
@@ -27,8 +53,18 @@ export function ModalDerecho({ reiniciarTablero }) {
             setMirandoHistorial(false);
         }
     }
-    function escribirMovimiento(mov) {
+    function jugadaAnterior() {
+        irAJugada(movActual - 1);
+    }
+    function jugadaSiguiente() {
+        irAJugada(movActual + 1);
+    }
+    function ultimaJugada() {
+        irAJugada(historial.length - 1);
+    }
+    function escribirMovimiento(mov, index, indexInterno) {
         const partes = mov.split("");
+        const movIndex = index * 2 + indexInterno;
         const letra = esPeon(partes[0]);
         const movimiento = letra !== true ? partes.slice(1).join("") : mov;
         const coronacion = movimiento.split("=");
@@ -39,12 +75,12 @@ export function ModalDerecho({ reiniciarTablero }) {
         return (
             <>
                 {letra !== true ? (
-                    <span className="movimiento" onClick={() => irAJugada(mov, historial)}>
+                    <span className="movimiento" onClick={() => irAJugada(movIndex)}>
                         <img src={data.piezas[letra]} alt={letra} />
                         {movimiento}
                     </span>
                 ) : (
-                    <span className="movimiento" onClick={() => irAJugada(mov, historial)}>
+                    <span className="movimiento" onClick={() => irAJugada(movIndex)}>
                         {coronacion[0]}
                         {piezaNueva && (
                             <>
@@ -67,9 +103,14 @@ export function ModalDerecho({ reiniciarTablero }) {
                 {jugadas &&
                     jugadas.map((jugada, index) => (
                         <p key={index} className={`jugada ${index % 2 === 0 ? "jugada2" : "jugada1"}`}>
-                            {index + 1}.{jugada.map((mov) => escribirMovimiento(mov))}
+                            {index + 1}.{jugada.map((mov, indexInterno) => escribirMovimiento(mov, index, indexInterno))}
                         </p>
                     ))}
+            </div>
+            <div className="botonesHistorial">
+                <button onClick={jugadaAnterior}>&lt;</button>
+                <button onClick={ultimaJugada}>|&gt;</button>
+                <button onClick={jugadaSiguiente}>&gt;</button>
             </div>
             {resultado !== false && (
                 <div>

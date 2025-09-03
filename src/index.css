@@ -260,6 +260,27 @@ main {
     }
 }
 
+.botonesHistorial {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 1rem;
+
+    button {
+        background-color: #383734;
+        border: none;
+        border-radius: 2px;
+        padding-inline: 1rem;
+        padding-block: 0.5rem;
+        color: #c6c6c5;
+
+        &:hover {
+            background-color: #3f3e3c;
+            cursor: pointer;
+        }
+    }
+}
+
 @media (max-width: 500px) {
     .tablero {
         grid-template-columns: repeat(8, 40px);
