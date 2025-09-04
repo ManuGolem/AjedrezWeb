@@ -19,6 +19,7 @@ A simplified single-player chess application inspired by chess.com, built with R
     - Algebraic notation logging
 - **Game State Management**:
     - Captured pieces tracking
+    - Move history tracking
 
 ## Tech Stack
 
@@ -37,7 +38,6 @@ This is an educational project not affiliated with chess.com. All chess rules/lo
     - [ ] Threefold Repetition
     - [ ] Fifty-Move Rule
     - [ ] Draw by Agreement
-- [ ] Move history tracking
 - [ ] Game status indicators
 - [ ] Save game state locally
 - [ ] PGN game import/export
