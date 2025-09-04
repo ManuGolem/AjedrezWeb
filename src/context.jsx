@@ -20,6 +20,7 @@ export function GameProvider({ start, children }) {
     const [llamada, setLlamada] = useState();
     const [historial, setHistorial] = useState([]);
     const [mirandoHistorial, setMirandoHistorial] = useState(false);
+    const [movActual, setMovActual] = useState(-1);
 
     return (
         <GameContext.Provider
@@ -59,6 +60,8 @@ export function GameProvider({ start, children }) {
                 historial,
                 mirandoHistorial,
                 setMirandoHistorial,
+                movActual,
+                setMovActual,
             }}
         >
             {children}

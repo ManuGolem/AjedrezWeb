@@ -4,9 +4,7 @@ import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const [movActual, setMovActual] = useState(-1);
-    const [prueba, setPrueba] = useState(-1);
-    const { jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
+    const { movActual, setMovActual, jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
     useEffect(() => {
         if (mate) {
             setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
@@ -29,10 +27,10 @@ export function ModalDerecho({ reiniciarTablero }) {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [movActual, historial.length]);
+    }, [movActual, historial]);
     useEffect(() => {
         setMovActual(movActual + 1);
-    }, [historial]);
+    }, [historial.length]);
     function irAJugada(mov) {
         const ultimoMov = historial.length - 1;
         if (mov > ultimoMov || mov < -1) {
