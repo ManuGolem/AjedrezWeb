@@ -44,9 +44,9 @@ function MostrarPiezasCoronacion({ color }) {
         const copiaMap = { ...mapPosPiezas };
         copiaMap[piezaSeleccionada] = "";
         copiaMap[posicion] = pieza;
-        const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
+        const { dejoEnJaque, jak: jaque } = hayJaque(copiaMap, turno, setJaque);
         let doyMate = false;
-        if (jaque.piezas) {
+        if (dejoEnJaque) {
             doyMate = esJaqueMate(jaque, copiaMap, setMate);
         }
         esAhogado(turno, copiaMap, setAhogado);
@@ -100,7 +100,6 @@ function MostrarPosiblesMovs({ columna }) {
         jugadas,
         setJugadas,
         setJaque,
-        jaque,
         setAhogado,
         setMate,
         setModal,
@@ -133,7 +132,6 @@ function MostrarPosiblesMovs({ columna }) {
                                   jugadas,
                                   setJugadas,
                                   setJaque,
-                                  jaque,
                                   setAhogado,
                                   setMate,
                                   setModal,
@@ -168,7 +166,6 @@ function MostrarPosiblesCapturas({ columna }) {
         movimientos,
         setMovimientos,
         setJaque,
-        jaque,
         setAhogado,
         setModal,
         setMate,
@@ -199,7 +196,6 @@ function MostrarPosiblesCapturas({ columna }) {
                                   movimientos,
                                   setMovimientos,
                                   setJaque,
-                                  jaque,
                                   setAhogado,
                                   setMate,
                                   setModal,

@@ -148,7 +148,6 @@ function moverPieza(
     jugadas,
     setJugadas,
     setJaque,
-    jaque,
     setAhogado,
     setMate,
     setModal,
@@ -213,7 +212,7 @@ function moverPieza(
     const coronacion = esCoronacion(posicion, piezaAMover, setModal);
     if (!coronacion) {
         //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-        const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
+        const { dejoEnJaque, jak: jaque } = hayJaque(copiaMap, turno, setJaque);
         let doyMate = false;
         if (dejoEnJaque) {
             doyMate = esJaqueMate(jaque, copiaMap, setMate);
@@ -269,7 +268,6 @@ function capturarPieza(
     movimientos,
     setMovimientos,
     setJaque,
-    jaque,
     setAhogado,
     setMate,
     setModal,
@@ -293,7 +291,7 @@ function capturarPieza(
     const coronacion = esCoronacion(posicion, piezaAMover, setModal);
     if (!coronacion) {
         //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-        const dejoEnJaque = hayJaque(copiaMap, turno, setJaque);
+        const { hayProblema: dejoEnJaque, jak: jaque } = hayJaque(copiaMap, turno, setJaque);
         let doyMate = false;
         if (dejoEnJaque) {
             doyMate = esJaqueMate(jaque, copiaMap, setMate);

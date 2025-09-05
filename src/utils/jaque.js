@@ -2,6 +2,7 @@
 import { esBlanco } from "./esAlgo";
 import { buscarPosiblesJugadas } from "./hacer";
 import { movsLegales } from "./mov";
+let jak;
 function hayJaque(mapPosPiezas, turno, setJaque) {
     const piezasBlancas = [];
     const piezasNegras = [];
@@ -21,7 +22,7 @@ function hayJaque(mapPosPiezas, turno, setJaque) {
             hayProblema = true;
         }
     });
-    return hayProblema;
+    return { hayProblema, jak };
 }
 function esJaque(posicion, mapPiezas, turno, setJaque) {
     //"K"-> oponente=Negras, "k"-> oponente=Blancas
@@ -29,18 +30,26 @@ function esJaque(posicion, mapPiezas, turno, setJaque) {
     const reyOponente = Object.keys(mapPiezas).find((cord) => mapPiezas[cord] === oponente);
     const posiblesCapturas = buscarPosiblesJugadas("captura", posicion, mapPiezas);
     if (posiblesCapturas.includes(reyOponente)) {
-        setJaque &&
-            (oponente === "K"
-                ? setJaque({
+        if (setJaque) {
+            if (oponente === "K") {
+                const jaqueNegro = {
                     piezas: "negras",
                     lugar: posicion,
                     rey: reyOponente,
-                })
-                : setJaque({
+                };
+                jak = jaqueNegro;
+                setJaque(jaqueNegro);
+            } else {
+                const jaqueBlanco = {
                     piezas: "blancas",
                     lugar: posicion,
                     rey: reyOponente,
-                }));
+                };
+                jak = jaqueBlanco;
+                setJaque(jaqueBlanco);
+            }
+        }
+
         return true;
     }
     return false;

@@ -173,7 +173,7 @@ function movsLegales(accion, jaque, cords, mapPosPiezas, primerMRB, primerMRN) {
         } else {
             copiaMap[jugada] = mapPosPiezas[cords];
         }
-        const hayProblema = hayJaque(copiaMap, turno, false);
+        const { hayProblema } = hayJaque(copiaMap, turno, false);
         !hayProblema && posiblesTapadas.push(jugada);
         // Aca manejo el caso donde la posicion de enroque no esta siendo atacado, pero el camino hacia esa posicion, si esta siendo atacado
         // Si estamos en ese caso, elimino todas estas posibles jugadas pero mantengo las otras (por eso la asignacion y no push)
