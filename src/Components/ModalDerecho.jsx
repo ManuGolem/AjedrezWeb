@@ -29,7 +29,9 @@ export function ModalDerecho({ reiniciarTablero }) {
         };
     }, [movActual, historial]);
     useEffect(() => {
-        setMovActual(movActual + 1);
+        if (historial.length > 0) {
+            setMovActual(movActual + 1);
+        }
     }, [historial.length]);
     function irAJugada(mov) {
         const ultimoMov = historial.length - 1;
