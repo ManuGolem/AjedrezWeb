@@ -93,8 +93,8 @@ function buscarPosiblesJugadas(orden, cord, mapPosPiezas, primerMRB, primerMRN) 
                 !mapPosPiezas[posicion]
                     ? posiblesMovs.push(posicion)
                     : pieza === "n"
-                      ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
-                      : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
+                        ? !esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion)
+                        : esBlanco(mapPosPiezas[posicion]) && posiblesCapturas.push(posicion);
             }
         });
     } else if (pieza === "r" || pieza === "R") {
@@ -212,7 +212,7 @@ function moverPieza(
     const coronacion = esCoronacion(posicion, piezaAMover, setModal);
     if (!coronacion) {
         //Saber si el movimiento deja en jaque al oponente y setear el jaque al oponente
-        const { dejoEnJaque, jak: jaque } = hayJaque(copiaMap, turno, setJaque);
+        const { hayProblema: dejoEnJaque, jak: jaque } = hayJaque(copiaMap, turno, setJaque);
         let doyMate = false;
         if (dejoEnJaque) {
             doyMate = esJaqueMate(jaque, copiaMap, setMate);
