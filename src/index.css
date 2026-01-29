@@ -281,6 +281,47 @@ main {
     }
 }
 
+.dialog {
+    position: absolute;
+    margin: 0;
+    margin: auto;
+    border-radius: 1rem;
+    background-color: #262522;
+    color: white;
+    border-color: #262522;
+    padding: 10px;
+
+    header {
+        padding: 10px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        h1 {
+            font-size: 24px;
+        }
+
+        form {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: none;
+        }
+
+        button {
+            background: none;
+            border: none;
+            font-size: 20px;
+
+            &:hover {
+                color: #3f3e3c;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
 @media (max-width: 500px) {
     .tablero {
         grid-template-columns: repeat(8, 40px);

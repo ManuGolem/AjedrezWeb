@@ -1,18 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import data from "../dictionary.json";
 import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
     const { movActual, setMovActual, jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
+    const dialogRef = useRef(null);
+    function abrirModal() {
+        dialogRef.current.showModal();
+    }
+    function cerrarModal() {
+        dialogRef.current.close();
+    }
     useEffect(() => {
         if (mate) {
-            setResultado(jaque.piezas === "blancas" ? "Ganan negras(0-1)" : "Ganan blancas(1-0)");
+            setResultado(jaque.piezas === "blancas" ? "Ganan negras (0-1)" : "Ganan blancas (1-0)");
         } else if (ahogado) {
             setResultado("Rey ahogado (1/2-1/2)");
         } else {
             setResultado(false);
         }
+        !resultado && abrirModal();
     }, [mate, ahogado]);
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -112,12 +120,25 @@ export function ModalDerecho({ reiniciarTablero }) {
                 <button onClick={ultimaJugada}>|&gt;</button>
                 <button onClick={jugadaSiguiente}>&gt;</button>
             </div>
-            {resultado !== false && (
+            <dialog ref={dialogRef} className="dialog">
                 <div>
-                    <h1>Fin de la partida</h1>
-                    <h2>Resultado: {resultado}</h2>
+                    <header>
+                        <h1>{resultado}</h1>
+                        <form method="dialog">
+                            <button>X</button>
+                        </form>
+                    </header>
+                    <button
+                        className="nuevaPartida"
+                        onClick={() => {
+                            cerrarModal();
+                            reiniciarTablero();
+                        }}
+                    >
+                        Nueva Partida
+                    </button>
                 </div>
-            )}
+            </dialog>
         </article>
     );
 }
