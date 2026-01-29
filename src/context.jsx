@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useRef } from "react";
 
 const GameContext = createContext();
 
@@ -21,7 +21,7 @@ export function GameProvider({ start, children }) {
     const [historial, setHistorial] = useState([]);
     const [mirandoHistorial, setMirandoHistorial] = useState(false);
     const [movActual, setMovActual] = useState(-1);
-
+    const tableroRef = useRef(null); //Para ajustar el dialog
     return (
         <GameContext.Provider
             value={{
@@ -62,6 +62,7 @@ export function GameProvider({ start, children }) {
                 setMirandoHistorial,
                 movActual,
                 setMovActual,
+                tableroRef,
             }}
         >
             {children}

@@ -4,10 +4,24 @@ import { esPeon } from "../utils/esAlgo";
 import { useGame } from "../context";
 export function ModalDerecho({ reiniciarTablero }) {
     const [resultado, setResultado] = useState(false);
-    const { movActual, setMovActual, jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas } = useGame();
+    const { movActual, setMovActual, jugadas, mate, ahogado, jaque, historial, setMapPiezas, setMirandoHistorial, setPosibles, setCapturas, tableroRef } =
+        useGame();
     const dialogRef = useRef(null);
     function abrirModal() {
-        dialogRef.current.showModal();
+        //Esto es para centrar el modal respecto al tablero
+        const tablero = tableroRef.current;
+        const dialog = dialogRef.current;
+
+        if (!tablero || !dialog) return;
+
+        const rect = tablero.getBoundingClientRect();
+
+        dialog.style.position = "fixed";
+        dialog.style.top = `${rect.top + rect.height / 2}px`;
+        dialog.style.left = `${rect.left + rect.width / 2}px`;
+        dialog.style.transform = "translate(-50%, -50%)";
+
+        dialog.showModal();
     }
     function cerrarModal() {
         dialogRef.current.close();
@@ -15,12 +29,13 @@ export function ModalDerecho({ reiniciarTablero }) {
     useEffect(() => {
         if (mate) {
             setResultado(jaque.piezas === "blancas" ? "Ganan negras (0-1)" : "Ganan blancas (1-0)");
+            abrirModal();
         } else if (ahogado) {
             setResultado("Rey ahogado (1/2-1/2)");
+            abrirModal();
         } else {
             setResultado(false);
         }
-        !resultado && abrirModal();
     }, [mate, ahogado]);
     useEffect(() => {
         const handleKeyDown = (event) => {

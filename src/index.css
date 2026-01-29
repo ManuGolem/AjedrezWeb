@@ -282,9 +282,6 @@ main {
 }
 
 .dialog {
-    position: absolute;
-    margin: 0;
-    margin: auto;
     border-radius: 1rem;
     background-color: #262522;
     color: white;

@@ -22,6 +22,7 @@ export function Tablero() {
         setAhogado,
         modal,
         setMirandoHistorial,
+        tableroRef,
     } = useGame();
     const { tableroCords, piezas } = useStartTablero(start);
     useEffect(() => {
@@ -51,7 +52,7 @@ export function Tablero() {
         }
     }, [modal]);
     return (
-        <article className="tablero">
+        <article className="tablero" ref={tableroRef}>
             {modal && (
                 <dialog ref={dialogRef} open className="modal">
                     <div className="coronar">
